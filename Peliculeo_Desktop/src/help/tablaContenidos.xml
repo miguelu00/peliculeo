@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<toc version="1.0"> 
+	<!--  categoryclosedimage="FolderClosed" categoryopenimage="FolderOpened" topicimage="ItemIco"-->
+	<tocitem text="Manual" target="manual">
+		<tocitem text="Tabla de Tickets/CARTELERA" target="ayudaTabla"/>
+	</tocitem>
+        <tocitem text="Alta Elementos" target="ayudaTicketAlta">
+            <tocitem text="Sacar un TICKET" target="ayudaTicketAlta"/>
+            <tocitem text="Agregar un CLIENTE" target="ayudaClienteAlta"/>
+            <tocitem text="Agregar una PELICULA" target="ayudaPeliculaAlta"/>
+        </tocitem>
+        <tocitem text="Gestión Elementos" target="ayudaGestionTickets">
+            <tocitem text="Gestión TICKETS" target="ayudaGestionTickets"/>
+            <tocitem text="Gestión PELICULAS" target="ayudaGestionPeliculas"/>
+            <tocitem text="Editar CLIENTES" target="ayudaEditarCliente"/>
+        </tocitem>
+</toc>

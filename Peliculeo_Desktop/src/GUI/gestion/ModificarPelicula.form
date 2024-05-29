@@ -1,0 +1,531 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<Form version="1.9" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JDialogFormInfo">
+  <Properties>
+    <Property name="defaultCloseOperation" type="int" value="2"/>
+    <Property name="title" type="java.lang.String" value="MODIFICAR PELICULA"/>
+  </Properties>
+  <SyntheticProperties>
+    <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
+    <SyntheticProperty name="generateCenter" type="boolean" value="false"/>
+  </SyntheticProperties>
+  <AuxValues>
+    <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="0"/>
+    <AuxValue name="FormSettings_autoSetComponentName" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_generateFQN" type="java.lang.Boolean" value="true"/>
+    <AuxValue name="FormSettings_generateMnemonicsCode" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_i18nAutoMode" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_layoutCodeTarget" type="java.lang.Integer" value="1"/>
+    <AuxValue name="FormSettings_listenerGenerationStyle" type="java.lang.Integer" value="0"/>
+    <AuxValue name="FormSettings_variablesLocal" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_variablesModifier" type="java.lang.Integer" value="2"/>
+    <AuxValue name="designerSize" type="java.awt.Dimension" value="-84,-19,0,5,115,114,0,18,106,97,118,97,46,97,119,116,46,68,105,109,101,110,115,105,111,110,65,-114,-39,-41,-84,95,68,20,2,0,2,73,0,6,104,101,105,103,104,116,73,0,5,119,105,100,116,104,120,112,0,0,2,-103,0,0,1,-18"/>
+  </AuxValues>
+
+  <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout"/>
+  <SubComponents>
+    <Container class="javax.swing.JPanel" name="jPanelHead">
+      <Properties>
+        <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+          <Dimension value="[125, 45]"/>
+        </Property>
+      </Properties>
+      <Constraints>
+        <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">
+          <BorderConstraints direction="First"/>
+        </Constraint>
+      </Constraints>
+
+      <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+        <Property name="columns" type="int" value="0"/>
+        <Property name="rows" type="int" value="1"/>
+      </Layout>
+      <SubComponents>
+        <Component class="javax.swing.JLabel" name="jLabel1">
+          <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Segoe UI Emoji" size="14" style="0"/>
+            </Property>
+            <Property name="horizontalAlignment" type="int" value="2"/>
+            <Property name="text" type="java.lang.String" value="Volver atras"/>
+          </Properties>
+          <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jLabel1MouseClicked"/>
+            <EventHandler event="mouseEntered" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jLabel1MouseEntered"/>
+            <EventHandler event="mouseExited" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jLabel1MouseExited"/>
+          </Events>
+        </Component>
+        <Container class="javax.swing.JPanel" name="jPanel2">
+
+          <Layout class="org.netbeans.modules.form.compat2.layouts.DesignCardLayout"/>
+          <SubComponents>
+            <Component class="javax.swing.JButton" name="jButtonAceptar">
+              <Properties>
+                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="66" green="ff" red="99" type="rgb"/>
+                </Property>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Segoe UI" size="14" style="0"/>
+                </Property>
+                <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="0" green="0" red="0" type="rgb"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="ACEPTAR CAMBIOS"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonAceptarActionPerformed"/>
+              </Events>
+              <Constraints>
+                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignCardLayout" value="org.netbeans.modules.form.compat2.layouts.DesignCardLayout$CardConstraintsDescription">
+                  <CardConstraints cardName="card2"/>
+                </Constraint>
+              </Constraints>
+            </Component>
+          </SubComponents>
+        </Container>
+      </SubComponents>
+    </Container>
+    <Container class="javax.swing.JPanel" name="jPanelContent">
+      <Constraints>
+        <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">
+          <BorderConstraints direction="Center"/>
+        </Constraint>
+      </Constraints>
+
+      <Layout>
+        <DimensionLayout dim="0">
+          <Group type="103" groupAlignment="0" attributes="0">
+              <Group type="102" attributes="0">
+                  <EmptySpace min="-2" pref="46" max="-2" attributes="0"/>
+                  <Component id="jPanelLabels" min="-2" pref="121" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="41" max="-2" attributes="0"/>
+                  <Component id="jPanelInputs" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+              </Group>
+          </Group>
+        </DimensionLayout>
+        <DimensionLayout dim="1">
+          <Group type="103" groupAlignment="0" attributes="0">
+              <Component id="jPanelInputs" min="-2" pref="620" max="-2" attributes="0"/>
+              <Component id="jPanelLabels" alignment="0" min="-2" pref="457" max="-2" attributes="0"/>
+          </Group>
+        </DimensionLayout>
+      </Layout>
+      <SubComponents>
+        <Container class="javax.swing.JPanel" name="jPanelLabels">
+          <Properties>
+            <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+              <Dimension value="[100, 200]"/>
+            </Property>
+            <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+              <Dimension value="[100, 200]"/>
+            </Property>
+          </Properties>
+
+          <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout"/>
+          <SubComponents>
+            <Component class="javax.swing.JLabel" name="jLabelTituloPeli">
+              <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Segoe UI" size="14" style="0"/>
+                </Property>
+                <Property name="labelFor" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
+                  <ComponentRef name="jTextFieldTituloPeli"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="Titulo"/>
+              </Properties>
+              <Constraints>
+                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
+                  <GridBagConstraints gridX="0" gridY="2" gridWidth="2" gridHeight="1" fill="2" ipadX="0" ipadY="0" insetsTop="5" insetsLeft="3" insetsBottom="5" insetsRight="3" anchor="10" weightX="0.0" weightY="0.1"/>
+                </Constraint>
+              </Constraints>
+            </Component>
+            <Component class="javax.swing.JLabel" name="jLabelCodPelicula">
+              <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Segoe UI" size="14" style="0"/>
+                </Property>
+                <Property name="labelFor" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
+                  <ComponentRef name="jTextFieldCodPelicula"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="Cod. Pelicula"/>
+              </Properties>
+              <Constraints>
+                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
+                  <GridBagConstraints gridX="0" gridY="0" gridWidth="2" gridHeight="1" fill="2" ipadX="0" ipadY="0" insetsTop="5" insetsLeft="3" insetsBottom="5" insetsRight="3" anchor="10" weightX="0.0" weightY="0.1"/>
+                </Constraint>
+              </Constraints>
+            </Component>
+            <Component class="javax.swing.JLabel" name="jLabelGeneroPeli">
+              <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Segoe UI" size="14" style="0"/>
+                </Property>
+                <Property name="horizontalAlignment" type="int" value="2"/>
+                <Property name="labelFor" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
+                  <ComponentRef name="jComboBoxGenero"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="Genero"/>
+              </Properties>
+              <Constraints>
+                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
+                  <GridBagConstraints gridX="0" gridY="4" gridWidth="2" gridHeight="1" fill="2" ipadX="0" ipadY="0" insetsTop="5" insetsLeft="3" insetsBottom="5" insetsRight="3" anchor="10" weightX="0.0" weightY="0.1"/>
+                </Constraint>
+              </Constraints>
+            </Component>
+            <Component class="javax.swing.JLabel" name="jLabelFechaEstreno">
+              <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Segoe UI" size="14" style="0"/>
+                </Property>
+                <Property name="labelFor" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
+                  <ComponentRef name="jSpinnerFechaEstreno"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="Fecha de Estreno"/>
+              </Properties>
+              <Constraints>
+                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
+                  <GridBagConstraints gridX="0" gridY="6" gridWidth="2" gridHeight="1" fill="2" ipadX="0" ipadY="0" insetsTop="5" insetsLeft="0" insetsBottom="5" insetsRight="0" anchor="10" weightX="0.0" weightY="0.1"/>
+                </Constraint>
+              </Constraints>
+            </Component>
+            <Component class="javax.swing.JLabel" name="jLabelAnio">
+              <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Segoe UI" size="14" style="0"/>
+                </Property>
+                <Property name="labelFor" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
+                  <ComponentRef name="jSpinnerAnioPeli"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="Anio"/>
+              </Properties>
+              <Constraints>
+                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
+                  <GridBagConstraints gridX="0" gridY="8" gridWidth="2" gridHeight="1" fill="2" ipadX="0" ipadY="0" insetsTop="5" insetsLeft="3" insetsBottom="5" insetsRight="3" anchor="10" weightX="0.0" weightY="0.1"/>
+                </Constraint>
+              </Constraints>
+            </Component>
+            <Component class="javax.swing.JLabel" name="jLabel2">
+              <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Segoe UI" size="14" style="0"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="Imagen Pelicula"/>
+              </Properties>
+              <Constraints>
+                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
+                  <GridBagConstraints gridX="0" gridY="10" gridWidth="2" gridHeight="1" fill="2" ipadX="0" ipadY="0" insetsTop="0" insetsLeft="0" insetsBottom="0" insetsRight="0" anchor="10" weightX="0.0" weightY="0.3"/>
+                </Constraint>
+              </Constraints>
+            </Component>
+          </SubComponents>
+        </Container>
+        <Container class="javax.swing.JPanel" name="jPanelInputs">
+
+          <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout"/>
+          <SubComponents>
+            <Component class="javax.swing.JTextField" name="jTextFieldCodPelicula">
+              <Properties>
+                <Property name="editable" type="boolean" value="false"/>
+                <Property name="enabled" type="boolean" value="false"/>
+                <Property name="focusable" type="boolean" value="false"/>
+              </Properties>
+              <Constraints>
+                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
+                  <GridBagConstraints gridX="-1" gridY="-1" gridWidth="1" gridHeight="1" fill="2" ipadX="0" ipadY="0" insetsTop="10" insetsLeft="0" insetsBottom="10" insetsRight="0" anchor="10" weightX="0.0" weightY="0.1"/>
+                </Constraint>
+              </Constraints>
+            </Component>
+            <Component class="javax.swing.JTextField" name="jTextFieldTituloPeli">
+              <Constraints>
+                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
+                  <GridBagConstraints gridX="0" gridY="2" gridWidth="1" gridHeight="1" fill="2" ipadX="0" ipadY="0" insetsTop="10" insetsLeft="0" insetsBottom="10" insetsRight="0" anchor="10" weightX="0.0" weightY="0.1"/>
+                </Constraint>
+              </Constraints>
+            </Component>
+            <Component class="javax.swing.JComboBox" name="jComboBoxGenero">
+              <Properties>
+                <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+                  <StringArray count="7">
+                    <StringItem index="0" value="Acci&#xf3;n"/>
+                    <StringItem index="1" value="Aventura"/>
+                    <StringItem index="2" value="Ciencia Ficci&#xf3;n"/>
+                    <StringItem index="3" value="Fantas&#xed;a"/>
+                    <StringItem index="4" value="Drama"/>
+                    <StringItem index="5" value="Psicol&#xf3;gica"/>
+                    <StringItem index="6" value="Suspense"/>
+                  </StringArray>
+                </Property>
+              </Properties>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+              </AuxValues>
+              <Constraints>
+                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
+                  <GridBagConstraints gridX="0" gridY="4" gridWidth="1" gridHeight="1" fill="2" ipadX="0" ipadY="0" insetsTop="10" insetsLeft="0" insetsBottom="10" insetsRight="0" anchor="10" weightX="0.0" weightY="0.1"/>
+                </Constraint>
+              </Constraints>
+            </Component>
+            <Component class="javax.swing.JSpinner" name="jSpinnerFechaEstreno">
+              <Properties>
+                <Property name="model" type="javax.swing.SpinnerModel" editor="org.netbeans.modules.form.editors2.SpinnerModelEditor">
+                  <SpinnerModel initial="now" minimum="now" stepSize="5" type="date"/>
+                </Property>
+              </Properties>
+              <Constraints>
+                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
+                  <GridBagConstraints gridX="0" gridY="6" gridWidth="1" gridHeight="1" fill="0" ipadX="0" ipadY="0" insetsTop="10" insetsLeft="0" insetsBottom="10" insetsRight="0" anchor="10" weightX="0.0" weightY="0.1"/>
+                </Constraint>
+              </Constraints>
+            </Component>
+            <Component class="javax.swing.JSpinner" name="jSpinnerAnioPeli">
+              <Properties>
+                <Property name="model" type="javax.swing.SpinnerModel" editor="org.netbeans.modules.form.editors2.SpinnerModelEditor">
+                  <SpinnerModel type="list">
+                    <ListItem value="2024"/>
+                    <ListItem value="2023"/>
+                    <ListItem value="2022"/>
+                    <ListItem value="2021"/>
+                    <ListItem value="2020"/>
+                    <ListItem value="2019"/>
+                    <ListItem value="2018"/>
+                    <ListItem value="2017"/>
+                    <ListItem value="2016"/>
+                    <ListItem value="2015"/>
+                    <ListItem value="2014"/>
+                    <ListItem value="2013"/>
+                    <ListItem value="2012"/>
+                    <ListItem value="2011"/>
+                    <ListItem value="2010"/>
+                    <ListItem value="2009"/>
+                    <ListItem value="2008"/>
+                    <ListItem value="2007"/>
+                    <ListItem value="2006"/>
+                    <ListItem value="2005"/>
+                    <ListItem value="2004"/>
+                    <ListItem value="2003"/>
+                    <ListItem value="2002"/>
+                    <ListItem value="2001"/>
+                    <ListItem value="2000"/>
+                    <ListItem value="1999"/>
+                    <ListItem value="1998"/>
+                    <ListItem value="1997"/>
+                    <ListItem value="1996"/>
+                    <ListItem value="1995"/>
+                    <ListItem value="1994"/>
+                    <ListItem value="1993"/>
+                    <ListItem value="1992"/>
+                    <ListItem value="1991"/>
+                    <ListItem value="1990"/>
+                    <ListItem value="1989"/>
+                    <ListItem value="1988"/>
+                    <ListItem value="1987"/>
+                    <ListItem value="1986"/>
+                    <ListItem value="1985"/>
+                    <ListItem value="1984"/>
+                    <ListItem value="1983"/>
+                    <ListItem value="1982"/>
+                    <ListItem value="1981"/>
+                    <ListItem value="1980"/>
+                    <ListItem value="1979"/>
+                    <ListItem value="1978"/>
+                    <ListItem value="1977"/>
+                    <ListItem value="1976"/>
+                    <ListItem value="1975"/>
+                    <ListItem value="1974"/>
+                    <ListItem value="1973"/>
+                    <ListItem value="1972"/>
+                    <ListItem value="1971"/>
+                    <ListItem value="1970"/>
+                    <ListItem value="1969"/>
+                    <ListItem value="1968"/>
+                    <ListItem value="1967"/>
+                    <ListItem value="1966"/>
+                    <ListItem value="1965"/>
+                    <ListItem value="1964"/>
+                    <ListItem value="1963"/>
+                    <ListItem value="1962"/>
+                    <ListItem value="1961"/>
+                    <ListItem value="1960"/>
+                    <ListItem value="1959"/>
+                    <ListItem value="1958"/>
+                    <ListItem value="1957"/>
+                    <ListItem value="1956"/>
+                    <ListItem value="1955"/>
+                    <ListItem value="1954"/>
+                    <ListItem value="1953"/>
+                    <ListItem value="1952"/>
+                    <ListItem value="1951"/>
+                    <ListItem value="1950"/>
+                    <ListItem value="1949"/>
+                    <ListItem value="1948"/>
+                    <ListItem value="1947"/>
+                    <ListItem value="1946"/>
+                    <ListItem value="1945"/>
+                    <ListItem value="1944"/>
+                    <ListItem value="1943"/>
+                    <ListItem value="1942"/>
+                    <ListItem value="1941"/>
+                    <ListItem value="1940"/>
+                    <ListItem value="1939"/>
+                    <ListItem value="1938"/>
+                    <ListItem value="1937"/>
+                    <ListItem value="1936"/>
+                    <ListItem value="1935"/>
+                    <ListItem value="1934"/>
+                    <ListItem value="1933"/>
+                    <ListItem value="1932"/>
+                    <ListItem value="1931"/>
+                    <ListItem value="1930"/>
+                    <ListItem value="1929"/>
+                    <ListItem value="1928"/>
+                    <ListItem value="1927"/>
+                    <ListItem value="1926"/>
+                    <ListItem value="1925"/>
+                    <ListItem value="1924"/>
+                    <ListItem value="1923"/>
+                    <ListItem value="1922"/>
+                    <ListItem value="1921"/>
+                    <ListItem value="1920"/>
+                    <ListItem value="1919"/>
+                    <ListItem value="1918"/>
+                    <ListItem value="1917"/>
+                    <ListItem value="1916"/>
+                    <ListItem value="1915"/>
+                    <ListItem value="1914"/>
+                    <ListItem value="1913"/>
+                    <ListItem value="1912"/>
+                    <ListItem value="1911"/>
+                    <ListItem value="1910"/>
+                    <ListItem value="1909"/>
+                    <ListItem value="1908"/>
+                    <ListItem value="1907"/>
+                    <ListItem value="1906"/>
+                    <ListItem value="1905"/>
+                    <ListItem value="1904"/>
+                    <ListItem value="1903"/>
+                    <ListItem value="1902"/>
+                    <ListItem value="1901"/>
+                    <ListItem value="1900"/>
+                    <ListItem value="1899"/>
+                    <ListItem value="1898"/>
+                    <ListItem value="1897"/>
+                    <ListItem value="1896"/>
+                    <ListItem value="1895"/>
+                    <ListItem value="1894"/>
+                    <ListItem value="1893"/>
+                    <ListItem value="1892"/>
+                    <ListItem value="1891"/>
+                    <ListItem value="1890"/>
+                    <ListItem value="1889"/>
+                    <ListItem value="1888"/>
+                    <ListItem value="1887"/>
+                    <ListItem value="1886"/>
+                    <ListItem value="1885"/>
+                    <ListItem value="1884"/>
+                    <ListItem value="1883"/>
+                    <ListItem value="1882"/>
+                    <ListItem value="1881"/>
+                    <ListItem value="1880"/>
+                    <ListItem value="1879"/>
+                    <ListItem value="1878"/>
+                    <ListItem value="1877"/>
+                    <ListItem value="1876"/>
+                    <ListItem value="1875"/>
+                    <ListItem value="1874"/>
+                    <ListItem value="1873"/>
+                    <ListItem value="1872"/>
+                    <ListItem value="1871"/>
+                    <ListItem value="1870"/>
+                    <ListItem value="1869"/>
+                    <ListItem value="1868"/>
+                    <ListItem value="1867"/>
+                    <ListItem value="1866"/>
+                    <ListItem value="1865"/>
+                    <ListItem value="1864"/>
+                    <ListItem value="1863"/>
+                    <ListItem value="1862"/>
+                    <ListItem value="1861"/>
+                    <ListItem value="1860"/>
+                    <ListItem value="1859"/>
+                    <ListItem value="1858"/>
+                    <ListItem value="1857"/>
+                    <ListItem value="1856"/>
+                    <ListItem value="1855"/>
+                    <ListItem value="1854"/>
+                    <ListItem value="1853"/>
+                    <ListItem value="1852"/>
+                    <ListItem value="1851"/>
+                    <ListItem value="1850"/>
+                    <ListItem value="1849"/>
+                    <ListItem value="1848"/>
+                    <ListItem value="1847"/>
+                    <ListItem value="1846"/>
+                    <ListItem value="1845"/>
+                    <ListItem value="1844"/>
+                    <ListItem value="1843"/>
+                    <ListItem value="1842"/>
+                    <ListItem value="1841"/>
+                    <ListItem value="1840"/>
+                    <ListItem value="1839"/>
+                    <ListItem value="1838"/>
+                    <ListItem value="1837"/>
+                    <ListItem value="1836"/>
+                    <ListItem value="1835"/>
+                    <ListItem value="1834"/>
+                    <ListItem value="1833"/>
+                    <ListItem value="1832"/>
+                    <ListItem value="1831"/>
+                    <ListItem value="1830"/>
+                    <ListItem value="1829"/>
+                    <ListItem value="1828"/>
+                    <ListItem value="1827"/>
+                    <ListItem value="1826"/>
+                    <ListItem value="1825"/>
+                    <ListItem value="1824"/>
+                    <ListItem value="1823"/>
+                    <ListItem value="1822"/>
+                    <ListItem value="1821"/>
+                    <ListItem value="1820"/>
+                    <ListItem value="1819"/>
+                    <ListItem value="1818"/>
+                    <ListItem value="1817"/>
+                    <ListItem value="1816"/>
+                    <ListItem value="1815"/>
+                    <ListItem value="1814"/>
+                    <ListItem value="1813"/>
+                    <ListItem value="1812"/>
+                    <ListItem value="1811"/>
+                    <ListItem value="1810"/>
+                    <ListItem value="1809"/>
+                    <ListItem value="1808"/>
+                    <ListItem value="1807"/>
+                    <ListItem value="1806"/>
+                    <ListItem value="1805"/>
+                    <ListItem value="1804"/>
+                    <ListItem value="1803"/>
+                    <ListItem value="1802"/>
+                    <ListItem value="1801"/>
+                    <ListItem value="1800"/>
+                  </SpinnerModel>
+                </Property>
+              </Properties>
+              <Constraints>
+                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
+                  <GridBagConstraints gridX="0" gridY="8" gridWidth="1" gridHeight="1" fill="2" ipadX="0" ipadY="0" insetsTop="10" insetsLeft="0" insetsBottom="10" insetsRight="0" anchor="10" weightX="0.0" weightY="0.1"/>
+                </Constraint>
+              </Constraints>
+            </Component>
+            <Component class="pruebaimageresize_cambio.CustomJLabelImagen" name="customJLabelImagen1">
+              <Constraints>
+                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
+                  <GridBagConstraints gridX="0" gridY="10" gridWidth="1" gridHeight="4" fill="1" ipadX="0" ipadY="0" insetsTop="0" insetsLeft="0" insetsBottom="0" insetsRight="0" anchor="10" weightX="0.0" weightY="0.4"/>
+                </Constraint>
+              </Constraints>
+            </Component>
+          </SubComponents>
+        </Container>
+      </SubComponents>
+    </Container>
+  </SubComponents>
+</Form>

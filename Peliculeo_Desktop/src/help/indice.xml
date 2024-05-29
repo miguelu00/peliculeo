@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='ISO-8859-1'  ?>
+<!DOCTYPE index PUBLIC "-//Sun Microsystems Inc.//DTD JavaHelp Index Version 1.0//EN" "http://java.sun.com/products/javahelp/index_1_0.dtd">
+<index version="1.0">
+        <indexitem text="Manual" target="manual"/>
+        <indexitem text="Tabla de Tickets" target="ayudaTabla"/>
+	<indexitem text="Dar de alta a un Cliente" target="ayudaClienteAlta"/>
+        <indexitem text="Sacar un Ticket" target="ayudaTicketAlta"/>
+        <indexitem text="Agregar una Película" target="ayudaPeliculaAlta" />
+        <indexitem text="Gestionar Tickets" target="ayudaGestionTickets" />
+        <indexitem text="Gestionar Peliculas" target="ayudaGestionPeliculas" />
+	<indexitem text="Editar a un Cliente" target="ayudaEditarCliente"/>
+</index>

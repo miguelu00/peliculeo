@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="informeGUIClientes" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="b93261d4-8f33-4091-bdbd-76560eb8bbfa">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<queryString>
+		<![CDATA[SELECT * FROM clientes]]>
+	</queryString>
+	<field name="NIF" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="nombre" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="apellidos" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="fecha_Alta" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="provincia" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<variable name="NIF_1" class="java.lang.Integer" resetType="Page" calculation="Count">
+		<variableExpression><![CDATA[$F{NIF}]]></variableExpression>
+	</variable>
+	<group name="grupoProvincia">
+		<groupExpression><![CDATA[$F{provincia}]]></groupExpression>
+		<groupHeader>
+			<band height="50">
+				<textField>
+					<reportElement x="79" y="10" width="378" height="40" uuid="062ebcb4-dc49-4937-afa2-1b6a6c47a8ce"/>
+					<textElement>
+						<font fontName="Comic Sans MS" size="24"/>
+					</textElement>
+					<textFieldExpression><![CDATA["PROVINCIA: " + $F{provincia}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="10"/>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch">
+			<staticText>
+				<reportElement x="20" y="12" width="437" height="51" uuid="cbca66c3-97f1-4f5a-8fde-61ed215b6e75"/>
+				<textElement>
+					<font fontName="Comic Sans MS" size="28" isBold="false"/>
+				</textElement>
+				<text><![CDATA[CLIENTES de CINE DE VERANO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="49" y="44" width="162" height="35" uuid="b37bd654-fd10-4202-a10f-18f3a1f285da"/>
+				<textElement>
+					<font fontName="Comic Sans MS" size="18" isBold="false"/>
+				</textElement>
+				<text><![CDATA[por PROVINCIA]]></text>
+			</staticText>
+			<image>
+				<reportElement x="457" y="0" width="77" height="79" uuid="b4215fb9-aa94-4dca-8881-9b3cb29c53c9"/>
+				<imageExpression><![CDATA["C:\\Users\\Miguelañez-PC\\Documents\\NetBeansProjects2\\GUI_gestionPeliculas\\src\\icon_small.png"]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="41" splitType="Stretch">
+			<staticText>
+				<reportElement x="89" y="2" width="100" height="20" uuid="1ae84ded-22c7-403f-a986-d2ab02b4c974"/>
+				<textElement>
+					<font fontName="Comic Sans MS" size="14"/>
+				</textElement>
+				<text><![CDATA[NOMBRE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="211" y="2" width="100" height="20" uuid="b7ed9cd2-cb88-499a-b90f-bfb5bf7f2a03"/>
+				<textElement>
+					<font fontName="Comic Sans MS" size="14"/>
+				</textElement>
+				<text><![CDATA[APELLIDOS]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="21" splitType="Stretch">
+			<textField>
+				<reportElement x="89" y="0" width="100" height="20" uuid="b441764a-2220-4b3c-86c7-942b17ac11f7"/>
+				<textElement>
+					<font fontName="Comic Sans MS" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nombre}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="211" y="0" width="100" height="20" uuid="58d84c35-aeb8-43e8-903a-1bdc8c2dbfed"/>
+				<textElement>
+					<font fontName="Comic Sans MS" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{apellidos}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="6" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="9" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="231" splitType="Stretch">
+			<pie3DChart>
+				<chart>
+					<reportElement x="49" y="13" width="438" height="206" uuid="e7efab5c-b87d-40ea-8097-9d0c19750589"/>
+					<chartTitle/>
+					<chartSubtitle/>
+					<chartLegend/>
+				</chart>
+				<pieDataset>
+					<keyExpression><![CDATA[$F{provincia}]]></keyExpression>
+					<valueExpression><![CDATA[$V{NIF_1}]]></valueExpression>
+					<labelExpression><![CDATA[$F{provincia}]]></labelExpression>
+				</pieDataset>
+				<pie3DPlot>
+					<plot/>
+					<itemLabel/>
+				</pie3DPlot>
+			</pie3DChart>
+		</band>
+	</summary>
+</jasperReport>
