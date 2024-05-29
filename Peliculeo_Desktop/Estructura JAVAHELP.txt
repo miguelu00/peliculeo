@@ -1,0 +1,10 @@
+AYUDA JAVAHELP
+
+manual    (general)
+ayudaTabla
+ayudaPeliculaAlta
+ayudaClienteAlta
+ayudaEditarCliente
+ayudaEditarCliente2
+ayudaGestionPelicula
+ayudaGestionTickets

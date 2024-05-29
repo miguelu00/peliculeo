@@ -1,0 +1,138 @@
+//MYSQL
+
+public class DB_Conexion {
+    private static final String JDBC_URL = "jdbc:mysql://localhost:3306/DATABASE_NAME?useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC";
+    private static Connection instance = null;
+
+    public DB_Conexion() {
+        if (instance == null) {
+            Properties props = new Properties();
+            props.put("user", "root");
+            props.put("password", "root");
+            try {
+                instance = DriverManager.getConnection(JDBC_URL, props);
+            } catch (SQLException e) {
+                System.err.println("No se pudo establecer conexion. Error: "+e);
+            }
+        }
+    }
+
+    public static Connection getConnection() throws SQLException {
+            return instance;
+    }
+
+}
+
+// POSTGRE SQL
+
+package net.codejava.jdbc;
+ 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.util.Properties;
+ 
+/**
+ * This program demonstrates how to make database connection to PostgreSQL
+ * server using JDBC.
+ * @author www.codejava.net
+ *
+ */
+public class JdbcPostgresqlConnection {
+ 
+    public static void main(String[] args) {
+        // create three connections to three different databases on localhost
+        Connection conn1 = null;
+        Connection conn2 = null;
+        Connection conn3 = null;
+ 
+        try {
+            // Connect method #1
+            String dbURL1 = "jdbc:postgresql:ProductDB1?user=root&password=secret";
+            conn1 = DriverManager.getConnection(dbURL1);
+            if (conn1 != null) {
+                System.out.println("Connected to database #1");
+            }
+ 
+            // Connect method #2
+            String dbURL2 = "jdbc:postgresql://localhost/ProductDB2";
+            String user = "root";
+            String pass = "secret";
+ 
+            conn2 = DriverManager.getConnection(dbURL2, user, pass);
+            if (conn2 != null) {
+                System.out.println("Connected to database #2");
+            }
+ 
+            // Connect method #3
+            String dbURL3 = "jdbc:postgresql://localhost:5432/ProductDB3";
+            Properties parameters = new Properties();
+            parameters.put("user", "root");
+            parameters.put("password", "secret");
+ 
+            conn3 = DriverManager.getConnection(dbURL3, parameters);
+            if (conn3 != null) {
+                System.out.println("Connected to database #3");
+            }
+ 
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            try {
+                if (conn1 != null && !conn1.isClosed()) {
+                    conn1.close();
+                }
+                if (conn2 != null && !conn2.isClosed()) {
+                    conn2.close();
+                }
+                if (conn3 != null && !conn3.isClosed()) {
+                    conn3.close();
+                }
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
+}
+
+// H2 DATABASE
+
+package net.codejava;
+ 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+ 
+public class H2ServerModeExample {
+ 
+    public static void main(String[] args) throws SQLException {
+        String jdbcURL = "jdbc:h2:tcp://localhost/~/test";
+        String username = "sa";
+        String password = "1234";
+ 
+        Connection connection = DriverManager.getConnection(jdbcURL, username, password);
+        System.out.println("Connected to H2 in server mode.");
+ 
+        String sql = "SELECT * FROM students";
+ 
+        Statement statement = connection.createStatement();
+ 
+        ResultSet resultSet = statement.executeQuery(sql);
+ 
+        int count = 0;
+ 
+        while (resultSet.next()) {
+            count++;
+ 
+            int ID = resultSet.getInt("ID");
+            String name = resultSet.getString("name");
+            System.out.println("Student #" + count + ": " + ID + ", " + name);
+        }
+ 
+        connection.close();
+    }
+}
+
+// 
