@@ -1,3 +1,4 @@
+<img src="https://imgur.com/vzOycZh" alt="LOGO_Peliculeo"/>
 # peliculeo
 Descubre y organiza los estrenos más calientes del momento con Peliculeo!
 
