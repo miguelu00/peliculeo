@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Rectángulo que se recortará para hacerlo triangulo para la esquina inferior derecha del LOGIN/REGISTRO-->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <solid android:color="#FB645000"/>
+</shape>
