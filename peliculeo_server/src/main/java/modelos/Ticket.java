@@ -1,10 +1,16 @@
 package modelos;
 
+import jakarta.persistence.*;
+
 import java.util.Objects;
 
+@Entity
+@Table(name = "tickets")
 public class Ticket {
 
-    private String IDticket;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private String ID;
     private int codPelicula;
     private String NIFusuario;
 
@@ -16,18 +22,18 @@ public class Ticket {
 
     }
 
-    public Ticket(String IDticket, int codPelicula, String NIFusuario) {
-        this.IDticket = IDticket;
+    public Ticket(String ID, int codPelicula, String NIFusuario) {
+        this.ID = ID;
         this.codPelicula = codPelicula;
         this.NIFusuario = NIFusuario;
     }
 
-    public String getIDticket() {
-        return IDticket;
+    public String getID() {
+        return ID;
     }
 
-    public void setIDticket(String IDticket) {
-        this.IDticket = IDticket;
+    public void setID(String IDticket) {
+        this.ID = IDticket;
     }
 
     public int getCodPelicula() {
@@ -51,11 +57,11 @@ public class Ticket {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Ticket ticket = (Ticket) o;
-        return Objects.equals(IDticket, ticket.IDticket);
+        return Objects.equals(ID, ticket.ID);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(IDticket);
+        return Objects.hash(ID);
     }
 }

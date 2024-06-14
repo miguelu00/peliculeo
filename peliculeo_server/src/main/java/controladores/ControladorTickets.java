@@ -1,12 +1,10 @@
 package controladores;
 
 import modelos.JSONResponse;
-import modelos.Pelicula;
 import modelos.Ticket;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 @RestController
@@ -22,7 +20,7 @@ public class ControladorTickets {
     //Agregar pelicula (comprobar si existe)
     @PostMapping(value = "addTicket", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public JSONResponse addTicket(@RequestBody Ticket t) {
-        if (!t.getIDticket().matches("^[A-Z]{3}")) {
+        if (!t.getID().matches("^[A-Z]{3}")) {
             return new JSONResponse(false, "FALLO. El código de ticket especificado no es válido!");
         }
         if (ticketList.contains(t)) {
@@ -42,7 +40,7 @@ public class ControladorTickets {
     public JSONResponse borrarTicket(@PathVariable String id) {
         int tickPosition = -1;
         for (Ticket t: ticketList) {
-            if (t.getIDticket().equals(id)) { tickPosition = ticketList.indexOf(t); break; }
+            if (t.getID().equals(id)) { tickPosition = ticketList.indexOf(t); break; }
         }
         if (tickPosition != -1) { ticketList.remove(tickPosition); }
         return (tickPosition == -1) ? new JSONResponse(false, "ERROR al encontrar ese Ticket!") : new JSONResponse(true, "Ticket eliminado.");
@@ -53,7 +51,7 @@ public class ControladorTickets {
     @GetMapping(value = "ticket/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public Object getticketByID(@PathVariable String id) {
         for (Ticket t: ticketList) {
-            if (t.getIDticket().equals(id)) { return t; }
+            if (t.getID().equals(id)) { return t; }
         }
         //Si no se ha encontrado, devolver un objeto JSON que avise de lo ocurrido
         return new JSONResponse(false, "NO SE HA ENCONTRADO LA TICKET CON ID " + id);
@@ -72,6 +70,10 @@ public class ControladorTickets {
         if (ticketsUser.isEmpty()) { return new JSONResponse(false, "ERROR. No existen tickets para el NIF de usuario indicado!"); }
 
         return ticketsUser;
+    }
+
+    public ArrayList<Ticket> getTicketList() {
+        return ticketList;
     }
 
     //Los tickets se borrarán automáticamente ya que sus CodPelicula/NIFUsuario quedarán huérfanos.

@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @ComponentScan(basePackages= {"controladores", "repositorios"})
 @EntityScan(basePackages= {"modelos"})
 @EnableJpaRepositories(basePackages= {"repositorios"})
+
 @SpringBootApplication
 public class PeliculeoApplication {
 

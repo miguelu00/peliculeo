@@ -8,14 +8,14 @@ public class Pelicula {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int codPelicula;
+    private int ID;
     private String titulo;
     private String fechaEstreno; // usar PARSE() [formato dd/MM/yyyy HH:mm]
     private String genero;
     private int anio;
 
-    public Pelicula(int codPelicula, String titulo, String fechaEstreno, String genero, int anio) {
-        this.codPelicula = codPelicula;
+    public Pelicula(int ID, String titulo, String fechaEstreno, String genero, int anio) {
+        this.ID = ID;
         this.titulo = titulo;
         this.fechaEstreno = fechaEstreno;
         this.genero = genero;
@@ -25,12 +25,12 @@ public class Pelicula {
     public Pelicula() {
     }
 
-    public int getCodPelicula() {
-        return codPelicula;
+    public int getID() {
+        return ID;
     }
 
-    public void setCodPelicula(int codPelicula) {
-        this.codPelicula = codPelicula;
+    public void setID(int ID) {
+        this.ID = ID;
     }
 
     public String getTitulo() {
