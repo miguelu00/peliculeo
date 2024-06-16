@@ -11,8 +11,8 @@ Gracias por leer, y disfruta de Peliculeo!
 ## DEPENDENCIAS
 ---
 
-· Linux: <b>https://docs.docker.com/engine/install/ubuntu/#install-using-the-repository</b>
-· Windows (Docker Desktop): <b>https://docs.docker.com/desktop/install/windows-install/</b>
+  · Linux: <b>https://docs.docker.com/engine/install/ubuntu/#install-using-the-repository</b>
+  · Windows (Docker Desktop): <b>https://docs.docker.com/desktop/install/windows-install/</b>
 <br>
 Antes de poder usar los scripts de la aplicación, asegurate de tener instalado Docker en tu sistema
 (Lamentablemente, en Windows solo está disponible Docker Desktop, sin embargo se puede usar una
