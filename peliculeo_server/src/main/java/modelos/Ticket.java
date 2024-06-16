@@ -1,16 +1,18 @@
 package modelos;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
 import java.util.Objects;
 
+@Data
 @Entity
 @Table(name = "tickets")
 public class Ticket {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String ID;
+    private int ID;
     private int codPelicula;
     private String NIFusuario;
 
@@ -22,33 +24,9 @@ public class Ticket {
 
     }
 
-    public Ticket(String ID, int codPelicula, String NIFusuario) {
+    public Ticket(int ID, int codPelicula, String NIFusuario) {
         this.ID = ID;
         this.codPelicula = codPelicula;
-        this.NIFusuario = NIFusuario;
-    }
-
-    public String getID() {
-        return ID;
-    }
-
-    public void setID(String IDticket) {
-        this.ID = IDticket;
-    }
-
-    public int getCodPelicula() {
-        return codPelicula;
-    }
-
-    public void setCodPelicula(int codPelicula) {
-        this.codPelicula = codPelicula;
-    }
-
-    public String getNIFusuario() {
-        return NIFusuario;
-    }
-
-    public void setNIFusuario(String NIFusuario) {
         this.NIFusuario = NIFusuario;
     }
 

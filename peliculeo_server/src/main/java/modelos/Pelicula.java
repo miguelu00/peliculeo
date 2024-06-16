@@ -1,7 +1,11 @@
 package modelos;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
+import java.util.Objects;
+
+@Data
 @Entity
 @Table(name = "peliculas")
 public class Pelicula {
@@ -25,43 +29,11 @@ public class Pelicula {
     public Pelicula() {
     }
 
-    public int getID() {
-        return ID;
-    }
-
-    public void setID(int ID) {
-        this.ID = ID;
-    }
-
-    public String getTitulo() {
-        return titulo;
-    }
-
-    public void setTitulo(String titulo) {
-        this.titulo = titulo;
-    }
-
-    public String getFechaEstreno() {
-        return fechaEstreno;
-    }
-
-    public void setFechaEstreno(String fechaEstreno) {
-        this.fechaEstreno = fechaEstreno;
-    }
-
-    public String getGenero() {
-        return genero;
-    }
-
-    public void setGenero(String genero) {
-        this.genero = genero;
-    }
-
-    public int getAnio() {
-        return anio;
-    }
-
-    public void setAnio(int anio) {
-        this.anio = anio;
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Ticket ticket = (Ticket) obj;
+        return Objects.equals(ID, ticket.getID());
     }
 }

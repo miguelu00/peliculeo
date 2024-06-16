@@ -1,80 +1,82 @@
 package controladores;
 
-import modelos.JSONResponse;
 import modelos.Ticket;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import repositorios.ServicioPelicula;
+import repositorios.ServicioTickets;
 
-import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @RestController
+@RequestMapping("/api/tickets")
 public class ControladorTickets {
 
-    ArrayList<Ticket> ticketList = new ArrayList<>();
+    @Autowired
+    private ServicioTickets serv;
 
-    @GetMapping(value = "pruebaTickets", produces = MediaType.TEXT_HTML_VALUE)
-    public String pruebaServer() {
-        return "<h3>Esta prueba se ejecuta correctamente!</h3>";
+    @Autowired
+    private ServicioPelicula servPelis;
+
+    @PostMapping(value = "add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> addTicket(@RequestBody Ticket ticket) {
+        if (ticket.getCodPelicula() == 0 || ticket.getNIFusuario() == null) {
+            return new ResponseEntity<>("FALLO. El ticket introducido no es válido!", HttpStatus.BAD_REQUEST);
+        }
+        Ticket savedTicket = serv.save(ticket);
+        return new ResponseEntity<>("Ticket introducido correctamente!", HttpStatus.CREATED);
     }
 
-    //Agregar pelicula (comprobar si existe)
-    @PostMapping(value = "addTicket", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public JSONResponse addTicket(@RequestBody Ticket t) {
-        if (!t.getID().matches("^[A-Z]{3}")) {
-            return new JSONResponse(false, "FALLO. El código de ticket especificado no es válido!");
-        }
-        if (ticketList.contains(t)) {
-            return new JSONResponse(false, "FALLO. Ya existe un ticket con ese ID!");
-        }
-        ticketList.add(t);
-        JSONResponse jsonResponse = new JSONResponse(true, "Ticket para cliente " + t.getNIFusuario() + " sacado correctamente!");
-        if (!ticketList.contains(t)) {
-            jsonResponse.setDone(false); jsonResponse.setMsg("ERROR al introducir el nuevo ticket!");
-        }
-
-        return jsonResponse;
+    @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<Ticket>> findAll() {
+        List<Ticket> tickets = serv.findAll();
+        return new ResponseEntity<>(tickets, HttpStatus.OK);
     }
 
-    //Eliminar
-    @DeleteMapping(value = "ticket/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public JSONResponse borrarTicket(@PathVariable String id) {
-        int tickPosition = -1;
-        for (Ticket t: ticketList) {
-            if (t.getID().equals(id)) { tickPosition = ticketList.indexOf(t); break; }
+    @DeleteMapping(value = "{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> borrarTicket(@PathVariable int id) {
+        Optional<Ticket> ticketOpt = serv.findById(id);
+        if (ticketOpt.isPresent()) {
+            serv.deleteById(id);
+            return new ResponseEntity<>("Ticket eliminado.", HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("ERROR al encontrar el ticket!", HttpStatus.NOT_FOUND);
         }
-        if (tickPosition != -1) { ticketList.remove(tickPosition); }
-        return (tickPosition == -1) ? new JSONResponse(false, "ERROR al encontrar ese Ticket!") : new JSONResponse(true, "Ticket eliminado.");
     }
-    //Modificar ticket
 
-    //Recuperar película [OBJECT ya que puede devolver o bien una película; o bien un JSONResponse]
-    @GetMapping(value = "ticket/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public Object getticketByID(@PathVariable String id) {
-        for (Ticket t: ticketList) {
-            if (t.getID().equals(id)) { return t; }
+    @GetMapping(value = "{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Object> getTicketByID(@PathVariable int id) {
+        Optional<Ticket> ticketOpt = serv.findById(id);
+        if (ticketOpt.isPresent()) {
+            return new ResponseEntity<>(ticketOpt.get(), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("NO SE HA ENCONTRADO EL TICKET CON ID " + id, HttpStatus.NOT_FOUND);
         }
-        //Si no se ha encontrado, devolver un objeto JSON que avise de lo ocurrido
-        return new JSONResponse(false, "NO SE HA ENCONTRADO LA TICKET CON ID " + id);
     }
 
-    //Recuperar listado de tickets para un NIF concreto.
-    @GetMapping(value = "tickets/{nif_cliente}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public Object getAllTickets(@PathVariable String nif_cliente) {
-        ArrayList<Ticket> ticketsUser = new ArrayList<>();
-        for (Ticket t: ticketList) {
-            if (nif_cliente.equals(t.getNIFusuario())) {
-                ticketsUser.add(t);
-            }
+    @GetMapping(value = "for/{nifusuario}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<Ticket>> buscarTicket(@PathVariable String nifusuario) {
+        List<Ticket> tickets = serv.findAll().stream()
+                .filter(ticket -> ticket.getNIFusuario().contains(nifusuario))
+                .toList();
+        return new ResponseEntity<>(tickets, HttpStatus.OK);
+    }
+
+    @PutMapping(value = "ticket/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> updateTicket(@PathVariable int id, @RequestBody Ticket updatedTicket) {
+        Optional<Ticket> ticketOpt = serv.findById(id);
+        if (ticketOpt.isPresent()) {
+            Ticket ticket = ticketOpt.get();
+            ticket.setCodPelicula(updatedTicket.getCodPelicula());
+            ticket.setNIFusuario(updatedTicket.getNIFusuario());
+            serv.save(ticket);
+            return new ResponseEntity<>("Ticket actualizado correctamente!", HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("ERROR al encontrar el ticket!", HttpStatus.NOT_FOUND);
         }
-        //Si termina vacío el array de tickets, devolver error; sino devolver dicho array.
-        if (ticketsUser.isEmpty()) { return new JSONResponse(false, "ERROR. No existen tickets para el NIF de usuario indicado!"); }
-
-        return ticketsUser;
     }
-
-    public ArrayList<Ticket> getTicketList() {
-        return ticketList;
-    }
-
-    //Los tickets se borrarán automáticamente ya que sus CodPelicula/NIFUsuario quedarán huérfanos.
 }

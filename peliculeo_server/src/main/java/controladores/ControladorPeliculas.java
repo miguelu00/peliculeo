@@ -1,94 +1,109 @@
 package controladores;
 
-import modelos.JSONResponse;
 import modelos.Pelicula;
+import modelos.PosterPelicula;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import repositorios.ServicioPelicula;
+import repositorios.ServicioPosters;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/peliculas")
 public class ControladorPeliculas {
 
+    @Autowired
     private ServicioPelicula serv;
-    ArrayList<Pelicula> peliculasList = new ArrayList<>();
+
+    @Autowired
+    private ServicioPosters servPosters;
 
     @GetMapping(value = "pruebaPelis", produces = MediaType.TEXT_HTML_VALUE)
     public String pruebaServer() {
         return "<h3>Esta prueba se ejecuta correctamente!</h3>";
     }
 
-    @PostMapping(value = "add")
-    public ResponseEntity<Pelicula> savePelicula(Pelicula pelicula) {
-        return new ResponseEntity<Pelicula>(serv.save(pelicula), HttpStatus.CREATED);
-    }
-
-    @GetMapping(value = "peliculas")
-    public ResponseEntity<List<Pelicula>> findAll() {
-        return new ResponseEntity<List<Pelicula>>(serv.findAll(), HttpStatus.FOUND);
-    }
-
-    //Agregar pelicula (comprobar si existe)
     @PostMapping(value = "add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public JSONResponse addPelicula(@RequestBody Pelicula p) {
-        if (p.getTitulo() == null || p.getFechaEstreno() == null) {
-            return new JSONResponse(false, "FALLO. La película introducida no es válida!");
+    public ResponseEntity<String> addPelicula(@RequestBody Pelicula pelicula) {
+        if (pelicula.getTitulo() == null || pelicula.getFechaEstreno() == null) {
+            return new ResponseEntity<String>("FALLO. La película introducida no es válida!", HttpStatus.BAD_REQUEST);
         }
-        peliculasList.add(p);
-        JSONResponse jsonResponse = new JSONResponse(true, "Pelicula introducida correctamente!");
-        if (!peliculasList.contains(p)) {
-            jsonResponse.setDone(false); jsonResponse.setMsg("ERROR al introducir la película!");
-        }
-
-        return jsonResponse;
+        Pelicula savedPelicula = serv.save(pelicula);
+        return new ResponseEntity<>("Pelicula introducida correctamente!", HttpStatus.CREATED);
     }
 
-    //Eliminar pelicula
-    @DeleteMapping(value = "pelicula/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public JSONResponse borrarPelicula(@PathVariable int id) {
-        int filmPos = -1;
-        for (Pelicula p: peliculasList) {
-            if (p.getID() == id) { filmPos = peliculasList.indexOf(p); break; }
+    /**
+     * Conseguir todas las películas del listado en BBDD.
+     * Este es un endpoint para peticiones GET
+     * @return Una lista de Pelicula's si todo OK
+     */
+    @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<Pelicula>> getAll() {
+        List<Pelicula> peliculas = serv.findAll();
+        return new ResponseEntity<>(peliculas, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "posters", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<PosterPelicula>> getAllPosters() {
+        List<PosterPelicula> posters = servPosters.findAll();
+        return new ResponseEntity<>(posters, HttpStatus.OK);
+    }
+
+    @DeleteMapping(value = "{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> borrarPelicula(@PathVariable int id) {
+        Optional<Pelicula> peliculaOpt = serv.findById(id);
+        if (peliculaOpt.isPresent()) {
+            serv.deleteById(id);
+            return new ResponseEntity<>("Pelicula eliminada.", HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("ERROR al encontrar la película!", HttpStatus.NOT_FOUND);
         }
-        if (filmPos != -1) { peliculasList.remove(filmPos); }
-        return (filmPos == -1) ? new JSONResponse(false, "ERROR al encontrar la película!") : new JSONResponse(true, "Pelicula eliminada.");
     }
-    //Modificar pelicula
 
-    //Recuperar película [OBJECT ya que puede devolver o bien una película; o bien un JSONResponse]
-    @GetMapping(value = "pelicula/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public Object getPeliculaByID(@PathVariable int id) {
-        for (Pelicula p: peliculasList) {
-            if (p.getID() == id) { return p; }
+    @GetMapping(value = "{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Object> getPeliculaByID(@PathVariable int id) {
+        Optional<Pelicula> peliculaOpt = serv.findById(id);
+        if (peliculaOpt.isPresent()) {
+            return new ResponseEntity<>(peliculaOpt.get(), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("NO SE HA ENCONTRADO LA PELICULA CON ID " + id, HttpStatus.NOT_FOUND);
         }
-        //Si no se ha encontrado, devolver un objeto JSON que avise de lo ocurrido
-        return new JSONResponse(false, "NO SE HA ENCONTRADO LA PELICULA CON ID " + id);
     }
 
-    //Recuperar listado de películas
-    @GetMapping(value = "peliculas", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ArrayList<Pelicula> getAllPeliculas() {
-        return peliculasList;
+    @GetMapping(value = "poster/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Object> getPosterForPeliID(@PathVariable int id) {
+        Optional<PosterPelicula> posterOpt = servPosters.findById(id);
+        if (posterOpt.isPresent()) {
+            return new ResponseEntity<>(posterOpt.get(), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("NO SE HA ENCONTRADO LA PELICULA CON ID " + id, HttpStatus.NOT_FOUND);
+        }
     }
 
-    @GetMapping(value = "pelicula/search/{titulo}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public Object buscarPelicula(@PathVariable String titulo) {
-        List<Pelicula> peliculasCopy = peliculasList;
-        peliculasCopy = peliculasCopy.stream()
+    @PutMapping(value = "{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> updatePelicula(@PathVariable int id, @RequestBody Pelicula updatedPelicula) {
+        Optional<Pelicula> peliculaOpt = serv.findById(id);
+        if (peliculaOpt.isPresent()) {
+            Pelicula pelicula = peliculaOpt.get();
+            pelicula.setTitulo(updatedPelicula.getTitulo());
+            pelicula.setFechaEstreno(updatedPelicula.getFechaEstreno());
+            serv.save(pelicula);
+            return new ResponseEntity<>("Pelicula actualizada correctamente!", HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("ERROR al encontrar la película para modificar!", HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @GetMapping(value = "buscar/{titulo}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<Pelicula>> buscarPelicula(@PathVariable String titulo) {
+        List<Pelicula> peliculas = serv.findAll().stream()
                 .filter(pelicula -> pelicula.getTitulo().contains(titulo))
                 .toList();
-        //Si no se ha encontrado nada, devolver un arraylist vacío
-        return peliculasCopy;
+        return new ResponseEntity<>(peliculas, HttpStatus.OK);
     }
-
-    public ArrayList<Pelicula> getPeliculasList() {
-        return peliculasList;
-    }
-
-    //Agregar auto-check para ver si se ha estrenado ya la película o no
 }
