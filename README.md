@@ -6,7 +6,6 @@ Descubre y organiza los estrenos más calientes del momento con Peliculeo!
 Aplicación que consta con un CRUD de tickets (cliente), además de una app para gestionar películas (estrenos y tickets); ambas sirviéndose de una API Spring fácil de consumir con actualización automática de estrenos.
 
 Para más info. sobre la API Spring, puedes acceder a la documentación en la carpeta "DOCUMENTACIÓN" de este repo.
-Gracias por leer, y disfruta de Peliculeo!
 
 
 ## DEPENDENCIAS
@@ -15,5 +14,7 @@ Antes de poder usar los scripts de la aplicación, asegurate de tener instalado 
   - Windows (Docker Desktop): <b>https://docs.docker.com/desktop/install/windows-install/</b>
 <br>
 
-(Lamentablemente, en Windows solo está disponible Docker Desktop, que se conoce por ser lento y propenso a errores. Sin embargo, existe una
-alternativa: ejecutar la versión de Linux desde WSL (Windows Subsystem for Linux: https://learn.microsoft.com/en-us/windows/wsl/install#install-wsl-command)
+<em>(Lamentablemente, en Windows solo está disponible Docker Desktop, que se conoce por ser lento y propenso a errores. <br>
+Para remediar esto, existe una alternativa: ejecutar la versión de Linux desde WSL (Windows Subsystem for Linux: https://learn.microsoft.com/en-us/windows/wsl/install#install-wsl-command)</em>
+
+Gracias por leer, y disfruta de Peliculeo!
