@@ -1,5 +1,6 @@
 package repositorios;
 
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -11,10 +12,11 @@ import org.springframework.stereotype.Service;
  * cuya fecha de emisión ya haya pasado.
  */
 @Service
+@AllArgsConstructor
 public class ServicioAutoBorrado {
 
-    @Autowired
-    private JdbcTemplate conexionJdbc;
+
+    private final JdbcTemplate conexionJdbc;
 
     /**
      * Método que ejecutará la query SQL cada 5 minutos

@@ -28,7 +28,7 @@ public class ControladorPeliculas {
         return "<h3>Esta prueba se ejecuta correctamente!</h3>";
     }
 
-    @PostMapping(value = "add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> addPelicula(@RequestBody Pelicula pelicula) {
         if (pelicula.getTitulo() == null || pelicula.getFechaEstreno() == null) {
             return new ResponseEntity<String>("FALLO. La película introducida no es válida!", HttpStatus.BAD_REQUEST);
