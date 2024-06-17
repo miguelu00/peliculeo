@@ -19,13 +19,20 @@ public class ControladorUsuarios {
     @PostMapping(value = "add", consumes = "application/json", produces = "application/json")
     public ResponseEntity<String> addUsuario(@RequestBody Usuario usuario) {
         Usuario savedUsuario = usuarioService.saveUsuario(usuario);
-        return new ResponseEntity<>("Usuario introducido correctamente!", HttpStatus.CREATED);
+        if (usuarioService.getUsuario(savedUsuario.getNIF() )== null) {
+            usuarioService.saveUsuario(savedUsuario);
+            return new ResponseEntity<>("Usuario introducido correctamente!", HttpStatus.CREATED);
+        }
+        return new ResponseEntity<>("ERROR al insertar al Usuario!", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @GetMapping(value = "/", produces = "application/json")
     public ResponseEntity<List<Usuario>> getAllUsuarios() {
         List<Usuario> usuarios = usuarioService.getAllUsuarios();
-        return new ResponseEntity<>(usuarios, HttpStatus.OK);
+        if (usuarios.size() > 0) {
+            return new ResponseEntity<>(usuarios, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
     }
 
     @GetMapping(value = "{nif}", produces = "application/json")
@@ -52,6 +59,9 @@ public class ControladorUsuarios {
     @DeleteMapping(value = "{nif}", produces = "application/json")
     public ResponseEntity<String> deleteUsuario(@PathVariable String nif) {
         usuarioService.deleteUsuario(nif);
-        return new ResponseEntity<>("Usuario eliminado.", HttpStatus.OK);
+        if (usuarioService.getUsuario(nif) == null) {
+            return new ResponseEntity<>("Usuario eliminado.", HttpStatus.OK);
+        }
+        return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
     }
 }

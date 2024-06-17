@@ -34,7 +34,10 @@ public class ControladorTickets {
     @GetMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Ticket>> findAll() {
         List<Ticket> tickets = serv.findAll();
-        return new ResponseEntity<>(tickets, HttpStatus.OK);
+        if (tickets.size() > 0) {
+            return new ResponseEntity<>(tickets, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(tickets, HttpStatus.NO_CONTENT);
     }
 
     @DeleteMapping(value = "{id}", produces = MediaType.APPLICATION_JSON_VALUE)
