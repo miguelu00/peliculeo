@@ -7,7 +7,7 @@ Añade un nuevo ticket a la base de datos.
 
 **Consumo**: `application/json`
 
-**Produce**: `application/json`
+**Devuelve**: `application/json`
 
 **Cuerpo de la solicitud**: Representación JSON de `Ticket`
 
@@ -18,7 +18,7 @@ Recupera todos los tickets de la base de datos.
 
 **Método HTTP**: GET
 
-**Produce**: `application/json`
+**Devuelve**: `application/json`
 
 ---
 
@@ -27,7 +27,7 @@ Elimina un ticket por su ID.
 
 **Método HTTP**: DELETE
 
-**Produce**: `application/json`
+**Devuelve**: `application/json`
 
 **Variable de ruta**: `id` - ID del ticket a eliminar
 
@@ -38,7 +38,7 @@ Recupera un ticket por su ID.
 
 **Método HTTP**: GET
 
-**Produce**: `application/json`
+**Devuelve**: `application/json`
 
 **Variable de ruta**: `id` - ID del ticket a recuperar
 
@@ -49,7 +49,7 @@ Busca tickets por el NIF del usuario.
 
 **Método HTTP**: GET
 
-**Produce**: `application/json`
+**Devuelve**: `application/json`
 
 **Variable de ruta**: `nifusuario` - NIF del usuario para buscar tickets
 
@@ -62,7 +62,7 @@ Actualiza un ticket con el ID proporcionado.
 
 **Consumo**: `application/json`
 
-**Produce**: `application/json`
+**Devuelve**: `application/json`
 
 **Variable de ruta**: `id` - ID del ticket a actualizar
 

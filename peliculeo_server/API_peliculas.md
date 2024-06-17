@@ -5,7 +5,7 @@ Devuelve una respuesta HTML simple para verificar la conectividad del servidor.
 
 **Método HTTP**: GET
 
-**Produce**: `text/html`
+**Devuelve**: `text/html`
 
 ---
 
@@ -16,18 +16,18 @@ Añade una nueva película a la base de datos.
 
 **Consumo**: `application/json`
 
-**Produce**: `application/json`
+**Devuelve**: `application/json`
 
 **Cuerpo de la solicitud**: Representación JSON de `Pelicula`
 
 ---
 
-#### GET /api/peliculas/all
+#### GET /api/peliculas/
 Recupera todas las películas de la base de datos.
 
 **Método HTTP**: GET
 
-**Produce**: `application/json`
+**Devuelve**: `application/json`
 
 ---
 
@@ -36,7 +36,7 @@ Elimina una película por su ID.
 
 **Método HTTP**: DELETE
 
-**Produce**: `application/json`
+**Devuelve**: `application/json`
 
 **Variable de ruta**: `id` - ID de la película a eliminar
 
@@ -47,7 +47,7 @@ Recupera una película por su ID.
 
 **Método HTTP**: GET
 
-**Produce**: `application/json`
+**Devuelve**: `application/json`
 
 **Variable de ruta**: `id` - ID de la película a recuperar
 
@@ -60,7 +60,7 @@ Actualiza una película con el ID proporcionado.
 
 **Consumo**: `application/json`
 
-**Produce**: `application/json`
+**Devuelve**: `application/json`
 
 **Variable de ruta**: `id` - ID de la película a actualizar
 
