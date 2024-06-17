@@ -1,80 +1,98 @@
 package com.miguelu00.peliculeo;
 
-import controladores.ControladorPeliculas;
-import controladores.HibernateUtils;
-import modelos.Pelicula;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import modelos.Usuario;
+import org.junit.jupiter.api.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 
-import java.util.List;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+/**
+ * TESTS UNITARIOS peliculeo!
+ *
+ * @TestMethodOrder -- Anotación usada para ejecutar los tests en un orden especificado por
+ * anotaciones.
+ */
 @SpringBootTest
-class PeliculeoApplicationTests {
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@AutoConfigureMockMvc
+public class PeliculeoApplicationTests extends TestsUtils {
 
-    ControladorPeliculas controladorPeliculas = new ControladorPeliculas();
+    @Autowired
+    private MockMvc mockMvc;
 
-    /**
-     * Comprobará que la conexíón con la Base de Datos es correcta
-     * (que el objeto SessionFactory de Hibernate es correcto)
-     */
-    @Test
-    void testConexionBD() {
-        HibernateUtils.buildSessionFactory();
-        Assertions.assertNotNull(HibernateUtils.getCurrentSession());
+    @Autowired
+    private WebApplicationContext webApplicationContext;
+
+    //La anotación @BeforeEach se encarga de ejecutar este bloque de código antes de cada
+    //  método de testing que incluya @Test detrás
+    @BeforeEach
+    @Order(1)
+    public void configuracionInicial() {
+        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
     }
 
-    /**
-     * Comprobar si la sesión sigue abierta una vez se ha establecido una conexión
-     * estable.
-     */
     @Test
-    void seIniciaCorrectamente() {
-        Assertions.assertNotNull(HibernateUtils.getCurrentSession());
+    @Order(2)
+    void testAddUsuario() throws Exception {
+        Usuario usuario = new Usuario();
+        usuario.setNIF("12345678A");
+        usuario.setNombre("Pippi");
+        usuario.setApellidos("Calzaslarga");
+        usuario.setFechAlta("2024-06-15");
+        usuario.setProvincia("Cordoba");
+        usuario.setPassword("ejemplo1");
+
+        mockMvc.perform(post("/api/usuarios/add")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(new ObjectMapper().writeValueAsString(usuario)))
+                .andExpect(status().isCreated())
+                .andExpect(content().string("Usuario introducido correctamente!"));
     }
 
-    /**
-     * Comprobará que se pueden recibir todas las películas usando la API
-     */
     @Test
-    void testGetAllPeliculas() {
-        ResponseEntity<List<Pelicula>> listaPelis = controladorPeliculas.getAll();
-        Assertions.assertSame(listaPelis.getStatusCode(), HttpStatus.FOUND);
+    @Order(3)
+    void testGetUsuario() throws Exception {
+        mockMvc.perform(get("/api/usuarios/12345678A"))
+                .andExpect(status().isOk());
     }
 
-    /**
-     * Comprobará que se puede agregar una película usando la API
-     */
     @Test
-    void testAgregarPelicula() {
-        ResponseEntity<String> resultado = controladorPeliculas.addPelicula(new Pelicula(1, "tre", "22-05-2024", "lel", 2000));
+    @Order(4)
+    void testUpdateUsuario() throws Exception {
+        Usuario usuario = new Usuario();
+        usuario.setNombre("Pipo");
+        usuario.setApellidos("Calzolargo");
+        usuario.setFechAlta("2024-06-14");
+        usuario.setProvincia("Jaen");
+        usuario.setPassword("contrasenia1234");
 
-        Assertions.assertSame(resultado.getStatusCode(), HttpStatus.CREATED);
+        mockMvc.perform(put("/api/usuarios/12345678A")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(new ObjectMapper().writeValueAsString(usuario)))
+                .andExpect(status().isOk());
     }
 
-    /**
-     * Comprobará que se puede modificar una película usando la API
-     */
     @Test
-    void testModificarPelicula() {
-        Pelicula peliTest = new Pelicula(1, "dod", "23-05-2024", "lel", 2000);
-        ResponseEntity<String> resultado = controladorPeliculas.updatePelicula(1, peliTest);
-
-        Assertions.assertSame(resultado.getStatusCode(), HttpStatus.OK);
-
-        //comprobar que ha cambiado los datos de la peli por la pasada en el test
-        Assertions.assertEquals(controladorPeliculas.getPeliculaByID(1), peliTest);
+    @Order(5)
+    void testGetAllUsuarios() throws Exception {
+        mockMvc.perform(get("/api/usuarios/"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
     }
 
-    /**
-     * Comprobará que se puede ELIMINAR una película usando la API
-     */
     @Test
-    void testEliminarPelicula() {
-        ResponseEntity<String> resultado = controladorPeliculas.borrarPelicula(1);
-
-        Assertions.assertSame(resultado.getStatusCode(), HttpStatus.OK);
+    @Order(6)
+    void testDeleteUsuario() throws Exception {
+        mockMvc.perform(delete("/api/usuarios/12345678A"))
+                .andExpect(status().isOk())
+                .andExpect(content().string("Usuario eliminado."));
     }
 }

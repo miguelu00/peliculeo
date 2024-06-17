@@ -31,7 +31,7 @@ public class ControladorTickets {
         return new ResponseEntity<>("Ticket introducido correctamente!", HttpStatus.CREATED);
     }
 
-    @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Ticket>> findAll() {
         List<Ticket> tickets = serv.findAll();
         return new ResponseEntity<>(tickets, HttpStatus.OK);

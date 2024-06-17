@@ -42,7 +42,7 @@ public class ControladorPeliculas {
      * Este es un endpoint para peticiones GET
      * @return Una lista de Pelicula's si todo OK
      */
-    @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Pelicula>> getAll() {
         List<Pelicula> peliculas = serv.findAll();
         return new ResponseEntity<>(peliculas, HttpStatus.OK);

@@ -18,7 +18,6 @@ public class HibernateUtils {
 				.build();
 		
 		sessionFactory = new MetadataSources(sr).buildMetadata().buildSessionFactory();
-		
 	}
 	
 	public static void openSession()

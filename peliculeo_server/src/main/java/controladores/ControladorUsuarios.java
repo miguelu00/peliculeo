@@ -22,7 +22,7 @@ public class ControladorUsuarios {
         return new ResponseEntity<>("Usuario introducido correctamente!", HttpStatus.CREATED);
     }
 
-    @GetMapping(value = "", produces = "application/json")
+    @GetMapping(value = "/", produces = "application/json")
     public ResponseEntity<List<Usuario>> getAllUsuarios() {
         List<Usuario> usuarios = usuarioService.getAllUsuarios();
         return new ResponseEntity<>(usuarios, HttpStatus.OK);
@@ -40,6 +40,7 @@ public class ControladorUsuarios {
 
     @PutMapping(value = "{nif}", consumes = "application/json", produces = "application/json")
     public ResponseEntity<String> updateUsuario(@PathVariable String nif, @RequestBody Usuario updatedUsuario) {
+        updatedUsuario.setNIF(nif);
         Usuario usuario = usuarioService.updateUsuario(nif, updatedUsuario);
         if (usuario != null) {
             return new ResponseEntity<>("Usuario actualizado correctamente!", HttpStatus.OK);
