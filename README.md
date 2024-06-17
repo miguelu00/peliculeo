@@ -15,6 +15,6 @@ Antes de poder usar los scripts de la aplicación, asegurate de tener instalado 
 <br>
 
 <em>(Lamentablemente, en Windows solo está disponible Docker Desktop, que se conoce por ser lento y propenso a errores. <br>
-Para remediar esto, existe una alternativa: ejecutar la versión de Linux desde WSL (Windows Subsystem for Linux: https://learn.microsoft.com/en-us/windows/wsl/install#install-wsl-command)</em>
+Para remediar esto, existe una alternativa: ejecutar la versión de Linux desde WSL (Windows Subsystem for Linux): https://learn.microsoft.com/en-us/windows/wsl/install#install-wsl-command)</em>
 
 Gracias por leer, y disfruta de Peliculeo!
