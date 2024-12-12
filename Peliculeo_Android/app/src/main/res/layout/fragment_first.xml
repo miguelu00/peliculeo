@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragments.LoginFragment">
+
+    <LinearLayout
+        android:id="@+id/main"
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            >
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:src="@drawable/peliculeo_logo"
+                />
+
+            <EditText
+                android:id="@+id/username"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="E-mail / Nombre de usuario" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/password"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Contraseña"
+                    android:inputType="textPassword"
+                    android:paddingEnd="48dp" />
+
+                <ImageButton
+                    android:id="@+id/showPasswordButton"
+                    android:layout_width="25dp"
+                    android:layout_height="20dp"
+
+                    android:visibility="gone"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:background="@drawable/pw_visible_on"
+                    android:contentDescription="Show Password" />
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="126dp"
+                android:gravity="bottom"
+                android:weightSum="2"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/loginButton"
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:layout_weight="1"
+                    android:foregroundTint="@color/design_default_color_secondary_variant"
+                    android:text="Iniciar sesión"
+                    android:textSize="20sp" />
+
+                <Button
+                    android:id="@+id/regButton"
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:layout_weight="1"
+                    android:background="@color/cardview_shadow_end_color"
+                    android:foregroundTint="@color/design_default_color_secondary_variant"
+                    android:text="Regístrate Ahora!"
+                    android:textSize="20sp" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tvMensajes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#FF2D2D"
+                android:padding="10dp"
+                android:visibility="gone"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+
+            android:layout_gravity="right"
+            >
+
+            <View
+                android:id="@+id/triangleView"
+
+                android:layout_width="200dp"
+                android:layout_height="110dp"
+                android:layout_gravity="right|bottom"
+                android:background="@drawable/triangulito_esquina" />
+            <View
+                android:layout_width="200dp"
+                android:layout_height="110dp"
+                android:layout_gravity="right|bottom"
+                android:background="@drawable/estrenos_icon"
+            />
+        </LinearLayout>
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>
