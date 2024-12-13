@@ -1,0 +1,37 @@
+<resources>
+    <string name="app_name">Peliculeo_Android</string>
+    <string name="action_settings">Acerca de...</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">Inicia sesión en PELICULEO!</string>
+    <string name="second_fragment_label">Regístrate en PELICULEO!</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="texto_registro">
+        Tus datos sólo serán usados únicamente
+        para recordarle y almacenar sus preferencias.\n
+        Puedes leer más en nuestra
+        <a href="https://www.peliculeomobile.com/politicasFragment/PrivacyNoticeFragment">política de privacidad</a>.
+    </string>
+    <string name="back_btn">Volver</string>
+    <string name="privacy_policy">
+        En Peliculeo!, valoramos tu privacidad y estamos comprometidos con la protección de tu información personal. Esta Política de Privacidad describe cómo recopilamos, usamos y protegemos tus datos cuando usas nuestra aplicación.
+    \n\n
+    · Recopilación de Datos \n
+    Podemos recopilar información personal como tu nombre, dirección de correo electrónico, detalles de pago y ubicación para facilitar la compra de entradas para películas y proporcionarte contenido y servicios personalizados.
+    \n\n
+    · Uso de los Datos \n
+    Usamos tus datos para procesar transacciones, enviar confirmaciones de reserva y mejorar tu experiencia de usuario. También podemos usar tu información para fines de marketing, pero solo con tu consentimiento.
+    \n\n
+    · Seguridad de los Datos \n
+    Implementamos medidas de seguridad estándar de la industria para proteger tu información personal contra el acceso no autorizado, pérdida o mal uso.
+    \n\n
+    · Servicios de Terceros \n
+    Podemos compartir parte de tu información con terceros de confianza, como procesadores de pagos, para completar las transacciones. Estos terceros están obligados a proteger tus datos y utilizarlos solo para el propósito especificado.
+    \n\n
+    · Derechos del Usuario \n
+    Tienes el derecho de acceder, corregir o eliminar tus datos personales en cualquier momento. Si tienes alguna pregunta sobre nuestras prácticas de privacidad, por favor contáctanos a support@peliculeo.com.
+    \n\n
+    Al utilizar nuestra aplicación, aceptas los términos de esta Política de Privacidad.
+    </string>
+</resources>
