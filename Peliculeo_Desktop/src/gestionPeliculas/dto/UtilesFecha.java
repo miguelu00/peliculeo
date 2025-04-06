@@ -20,7 +20,7 @@ public class UtilesFecha {
      * @return La fecha formateada EN FORMATO STRING, ó bien NULL si no se ha introducido una fecha correcta.
      */
     public static String spinnerFechaToStringDate(Object fechaEnStr) {
-        SimpleDateFormat sdf = new SimpleDateFormat();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy HH:mm");
         String formateada = sdf.format(fechaEnStr);
         
         return formateada;
@@ -33,8 +33,9 @@ public class UtilesFecha {
      */
     public static Date fechaStrToDate(String fechaFormateada) {
         SimpleDateFormat sdf = new SimpleDateFormat();
+        
         try {
-            return sdf.parse(fechaFormateada);
+            return sdf.parse(fechaFormateada.trim());
         } catch (ParseException parsExc) {
             System.err.println("FALLO al formatear la fecha!");
             return null;
