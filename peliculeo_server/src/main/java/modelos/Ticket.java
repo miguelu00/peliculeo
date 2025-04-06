@@ -1,5 +1,6 @@
 package modelos;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -12,9 +13,15 @@ public class Ticket {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonProperty("ID")
     private int ID;
+    @JsonProperty("NIF_cliente")
+    private String NIF_cliente;
+    @JsonProperty("codPelicula")
     private int codPelicula;
-    private String NIFusuario;
+    @JsonProperty("fecha_Peli")
+    private String fecha_Peli;
+
 
     /**
      * la fecha del estreno se pedirá a base de datos al hacer la consulta para mostrarse en la GUI
@@ -27,7 +34,7 @@ public class Ticket {
     public Ticket(int ID, int codPelicula, String NIFusuario) {
         this.ID = ID;
         this.codPelicula = codPelicula;
-        this.NIFusuario = NIFusuario;
+        this.NIF_cliente = NIFusuario;
     }
 
     @Override

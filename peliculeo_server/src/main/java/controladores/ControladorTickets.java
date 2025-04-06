@@ -22,13 +22,24 @@ public class ControladorTickets {
     @Autowired
     private ServicioPelicula servPelis;
 
-    @PostMapping(value = "add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> addTicket(@RequestBody Ticket ticket) {
-        if (ticket.getCodPelicula() == 0 || ticket.getNIFusuario() == null) {
-            return new ResponseEntity<>("FALLO. El ticket introducido no es válido!", HttpStatus.BAD_REQUEST);
+        if (ticket.getNIF_cliente() == null) {
+            throwCustom("FALLO. El nif pasado es NULL!");
         }
-        Ticket savedTicket = serv.save(ticket);
-        return new ResponseEntity<>("Ticket introducido correctamente!", HttpStatus.CREATED);
+        if (ticket.getCodPelicula() == 0) {
+            throwCustom("FALLO. El ticket introducido no es válido!");
+        }
+        if (ticket.getNIF_cliente().isEmpty()) {
+            throwCustom("ERROR. El NIF de cliente es nulo!");
+        }
+        ticket.setFecha_Peli(servPelis.findById(ticket.getCodPelicula()).get().getFechaEstreno());
+        serv.save(ticket);
+        return new ResponseEntity<>("Ticket introducido correctamente!", HttpStatus.OK);
+    }
+
+    private ResponseEntity throwCustom(String msg) {
+        return new ResponseEntity<>(msg, HttpStatus.BAD_REQUEST);
     }
 
     @GetMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -40,14 +51,32 @@ public class ControladorTickets {
         return new ResponseEntity<>(tickets, HttpStatus.NO_CONTENT);
     }
 
-    @DeleteMapping(value = "{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> borrarTicket(@PathVariable int id) {
-        Optional<Ticket> ticketOpt = serv.findById(id);
+        System.out.println("Intentando borrar ticket con ID: " + id);
+
+        if (!serv.existsById(id)) {
+            return new ResponseEntity<>("ERROR: No se encontró el ticket!", HttpStatus.NOT_FOUND);
+        }
+
+        serv.deleteById(id);
+        return new ResponseEntity<>("Ticket eliminado.", HttpStatus.OK);
+    }
+
+    // Eliminar UN ticket de entre todos los que haya con un codPelicula y pertenezcan a un NIF concreto
+    @DeleteMapping(value = "/uno", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> borrarUnTicket(@RequestBody Ticket ticket) {
+        // Buscar un ticket que coincida con codPelicula y NIF_cliente
+        Optional<Ticket> ticketOpt = serv.findAll().stream()
+                .filter(t -> t.getCodPelicula() == ticket.getCodPelicula() &&
+                        t.getNIF_cliente().equals(ticket.getNIF_cliente()))
+                .findFirst();
+
         if (ticketOpt.isPresent()) {
-            serv.deleteById(id);
-            return new ResponseEntity<>("Ticket eliminado.", HttpStatus.OK);
+            serv.delete(ticketOpt.get());  // Eliminar el ticket encontrado
+            return new ResponseEntity<>("Ticket eliminado correctamente!", HttpStatus.OK);
         } else {
-            return new ResponseEntity<>("ERROR al encontrar el ticket!", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("ERROR: No se encontró el ticket!", HttpStatus.NOT_FOUND);
         }
     }
 
@@ -57,14 +86,14 @@ public class ControladorTickets {
         if (ticketOpt.isPresent()) {
             return new ResponseEntity<>(ticketOpt.get(), HttpStatus.OK);
         } else {
-            return new ResponseEntity<>("NO SE HA ENCONTRADO EL TICKET CON ID " + id, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("NO SE HA ENCONTRADO EL TICKET CON ID " + id, HttpStatus.NO_CONTENT);
         }
     }
 
     @GetMapping(value = "for/{nifusuario}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Ticket>> buscarTicket(@PathVariable String nifusuario) {
         List<Ticket> tickets = serv.findAll().stream()
-                .filter(ticket -> ticket.getNIFusuario().contains(nifusuario))
+                .filter(ticket -> ticket.getNIF_cliente().contains(nifusuario))
                 .toList();
         return new ResponseEntity<>(tickets, HttpStatus.OK);
     }
@@ -75,11 +104,11 @@ public class ControladorTickets {
         if (ticketOpt.isPresent()) {
             Ticket ticket = ticketOpt.get();
             ticket.setCodPelicula(updatedTicket.getCodPelicula());
-            ticket.setNIFusuario(updatedTicket.getNIFusuario());
+            ticket.setNIF_cliente(updatedTicket.getNIF_cliente());
             serv.save(ticket);
             return new ResponseEntity<>("Ticket actualizado correctamente!", HttpStatus.OK);
         } else {
-            return new ResponseEntity<>("ERROR al encontrar el ticket!", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("ERROR al encontrar el ticket!", HttpStatus.NO_CONTENT);
         }
     }
 }

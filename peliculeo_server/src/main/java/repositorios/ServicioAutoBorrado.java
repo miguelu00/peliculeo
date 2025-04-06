@@ -21,7 +21,7 @@ public class ServicioAutoBorrado {
     /**
      * Método que ejecutará la query SQL cada 5 minutos
       */
-    @Scheduled(cron = "0 */5 * * * *")
+    @Scheduled(cron = "0 */10 * * * *")
     public void executeSqlQuery() {
         String sql = "CALL DeleteOldMovies()";  // Replace with your actual SQL query
         conexionJdbc.execute(sql);

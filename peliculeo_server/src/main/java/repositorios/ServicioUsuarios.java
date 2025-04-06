@@ -22,7 +22,7 @@ public class ServicioUsuarios {
 
     public Usuario saveUsuario(Usuario usuario) {
         // Aquí podrías hashear la contraseña si tuviera
-        // usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
+        usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
         return usuarioRepository.save(usuario);
     }
 

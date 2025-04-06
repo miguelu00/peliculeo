@@ -1,7 +1,7 @@
 package modelos;
 
 /**
- * Esta clase se usa para enviar un mensaje de OK (200/201) ó ERROR (400/404...) al
+ * Esta clase se usa para enviar un mensaje de OK (200/201) ó ERROR (400/204...) al
  * cliente que consuma la API.
  * Consta de una variable booleana, que indica si la petición se ha realizado correctamente,
  * y de una variable msg, en la que se guardará generalmente un string con un mensaje

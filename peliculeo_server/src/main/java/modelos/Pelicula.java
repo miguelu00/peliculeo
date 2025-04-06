@@ -33,7 +33,7 @@ public class Pelicula {
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (obj == null || getClass() != obj.getClass()) return false;
-        Ticket ticket = (Ticket) obj;
-        return Objects.equals(ID, ticket.getID());
+        Pelicula pelicula = (Pelicula) obj;
+        return Objects.equals(ID, pelicula.getID());
     }
 }

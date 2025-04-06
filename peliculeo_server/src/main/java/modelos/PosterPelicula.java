@@ -1,41 +1,27 @@
 package modelos;
 import jakarta.persistence.*;
+import lombok.Data;
+import org.hibernate.annotations.Type;
 
+@Data
 @Entity
-@Table(name = "posterpeliculas")
+@Table(name = "posterPeliculas")
 public class PosterPelicula {
 
-    @EmbeddedId
-    private PosterPeliculaID ID;
 
-    @MapsId("peliculaId")
-    @OneToOne
-    @JoinColumn(name = "ID", nullable = false)
-    private Pelicula pelicula;
-
-    private String urlPosterPeli;
+    @Id
+    private int codPelicula;
+    private String titulo;
+    @Lob
+    @Column(name = "img", columnDefinition = "blob")
+    private byte[] img;
 
     public PosterPelicula() {
     }
 
-    public PosterPelicula(Pelicula pelicula, String urlPosterPeli) {
-        this.pelicula = pelicula;
-        this.urlPosterPeli = urlPosterPeli;
-    }
-
-    public Pelicula getPelicula() {
-        return pelicula;
-    }
-
-    public void setPelicula(Pelicula pelicula) {
-        this.pelicula = pelicula;
-    }
-
-    public String getUrlPosterPeli() {
-        return urlPosterPeli;
-    }
-
-    public void setUrlPosterPeli(String urlPosterPeli) {
-        this.urlPosterPeli = urlPosterPeli;
+    public PosterPelicula(int codPelicula, String titulo, byte[] posterPeli) {
+        this.codPelicula = codPelicula;
+        this.titulo = titulo;
+        this.img = posterPeli;
     }
 }

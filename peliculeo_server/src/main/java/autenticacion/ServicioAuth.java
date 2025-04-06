@@ -29,4 +29,24 @@ public class ServicioAuth {
         }
         return false;
     }
+
+    /**
+     * Register a new user.
+     * @param newUsuario The new user's details.
+     * @return A message indicating success or failure.
+     */
+    public String register(Usuario newUsuario) {
+        // Check para ver si ya existe el usuario
+        if (usuarioRepository.existsById(newUsuario.getNIF())) {
+            return "Error: Ya existe un usuario con ese NIF.";
+        }
+
+        // Encriptamos el password antes de almacenar el Usuario
+        newUsuario.setPassword(passwordEncoder.encode(newUsuario.getPassword()));
+
+        // Save the new user
+        usuarioRepository.save(newUsuario);
+
+        return "Registro exitoso!";
+    }
 }

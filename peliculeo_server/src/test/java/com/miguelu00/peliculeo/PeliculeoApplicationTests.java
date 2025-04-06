@@ -11,6 +11,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.util.Date;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -46,11 +48,11 @@ public class PeliculeoApplicationTests extends TestsUtils {
         usuario.setNIF("12345678A");
         usuario.setNombre("Pippi");
         usuario.setApellidos("Calzaslarga");
-        usuario.setFechAlta("2024-06-15");
+        usuario.setFecha_Alta(new Date(2024, 6, 15));
         usuario.setProvincia("Cordoba");
         usuario.setPassword("ejemplo1");
 
-        mockMvc.perform(post("/api/usuarios/add")
+        mockMvc.perform(post("/api/usuarios/")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(usuario)))
                 .andExpect(status().isCreated())
@@ -70,7 +72,7 @@ public class PeliculeoApplicationTests extends TestsUtils {
         Usuario usuario = new Usuario();
         usuario.setNombre("Pipo");
         usuario.setApellidos("Calzolargo");
-        usuario.setFechAlta("2024-06-14");
+        usuario.setFecha_Alta(new Date(2024, 6, 15));
         usuario.setProvincia("Jaen");
         usuario.setPassword("contrasenia1234");
 

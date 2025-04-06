@@ -2,6 +2,10 @@ package modelos;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DialectOverride;
+
+import java.util.Date;
 
 @Data
 @Entity
@@ -12,7 +16,7 @@ public class Usuario {
     private String NIF;
     private String nombre;
     private String apellidos;
-    private String password;
-    private String fechAlta;
+    private Date fecha_Alta;
     private String provincia;
+    private String password;
 }
