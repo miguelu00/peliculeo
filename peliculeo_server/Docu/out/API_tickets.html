@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <title>END POINTS&colon; Tickets</title>
+            <style>
+/* From extension vscode.github */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+.vscode-dark img[src$=\#gh-light-mode-only],
+.vscode-light img[src$=\#gh-dark-mode-only],
+.vscode-high-contrast:not(.vscode-high-contrast-light) img[src$=\#gh-light-mode-only],
+.vscode-high-contrast-light img[src$=\#gh-dark-mode-only] {
+	display: none;
+}
+
+</style>
+            
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+<style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        <style>
+.task-list-item {
+    list-style-type: none;
+}
+
+.task-list-item-checkbox {
+    margin-left: -20px;
+    vertical-align: middle;
+    pointer-events: none;
+}
+</style>
+<style>
+:root {
+  --color-note: #0969da;
+  --color-tip: #1a7f37;
+  --color-warning: #9a6700;
+  --color-severe: #bc4c00;
+  --color-caution: #d1242f;
+  --color-important: #8250df;
+}
+
+</style>
+<style>
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-note: #2f81f7;
+    --color-tip: #3fb950;
+    --color-warning: #d29922;
+    --color-severe: #db6d28;
+    --color-caution: #f85149;
+    --color-important: #a371f7;
+  }
+}
+
+</style>
+<style>
+.markdown-alert {
+  padding: 0.5rem 1rem;
+  margin-bottom: 16px;
+  color: inherit;
+  border-left: .25em solid #888;
+}
+
+.markdown-alert>:first-child {
+  margin-top: 0
+}
+
+.markdown-alert>:last-child {
+  margin-bottom: 0
+}
+
+.markdown-alert .markdown-alert-title {
+  display: flex;
+  font-weight: 500;
+  align-items: center;
+  line-height: 1
+}
+
+.markdown-alert .markdown-alert-title .octicon {
+  margin-right: 0.5rem;
+  display: inline-block;
+  overflow: visible !important;
+  vertical-align: text-bottom;
+  fill: currentColor;
+}
+
+.markdown-alert.markdown-alert-note {
+  border-left-color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-note .markdown-alert-title {
+  color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-important {
+  border-left-color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-important .markdown-alert-title {
+  color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-warning {
+  border-left-color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-warning .markdown-alert-title {
+  color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-tip {
+  border-left-color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-tip .markdown-alert-title {
+  color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-caution {
+  border-left-color: var(--color-caution);
+}
+
+.markdown-alert.markdown-alert-caution .markdown-alert-title {
+  color: var(--color-caution);
+}
+
+</style>
+        
+        </head>
+        <body class="vscode-body vscode-light">
+            <h3 id="end-points-tickets">END POINTS: Tickets</h3>
+<h4 id="post-apiticketsadd">POST /api/tickets/add</h4>
+<p>Añade un nuevo ticket a la base de datos.</p>
+<p><strong>Método HTTP</strong>: POST</p>
+<p><strong>Consumo</strong>: <code>application/json</code></p>
+<p><strong>Devuelve</strong>: <code>application/json</code></p>
+<p><strong>Cuerpo de la solicitud</strong>: Representación JSON de <code>Ticket</code></p>
+<hr>
+<h4 id="get-apiticketsgetall">GET /api/tickets/getall</h4>
+<p>Recupera todos los tickets de la base de datos.</p>
+<p><strong>Método HTTP</strong>: GET</p>
+<p><strong>Devuelve</strong>: <code>application/json</code></p>
+<hr>
+<h4 id="delete-apiticketsticketid">DELETE /api/tickets/ticket/{id}</h4>
+<p>Elimina un ticket por su ID.</p>
+<p><strong>Método HTTP</strong>: DELETE</p>
+<p><strong>Devuelve</strong>: <code>application/json</code></p>
+<p><strong>Variable de ruta</strong>: <code>id</code> - ID del ticket a eliminar</p>
+<hr>
+<h4 id="get-apiticketsticketid">GET /api/tickets/ticket/{id}</h4>
+<p>Recupera un ticket por su ID.</p>
+<p><strong>Método HTTP</strong>: GET</p>
+<p><strong>Devuelve</strong>: <code>application/json</code></p>
+<p><strong>Variable de ruta</strong>: <code>id</code> - ID del ticket a recuperar</p>
+<hr>
+<h4 id="get-apiticketsticketsfornifusuario">GET /api/tickets/tickets/for/{nifusuario}</h4>
+<p>Busca tickets por el NIF del usuario.</p>
+<p><strong>Método HTTP</strong>: GET</p>
+<p><strong>Devuelve</strong>: <code>application/json</code></p>
+<p><strong>Variable de ruta</strong>: <code>nifusuario</code> - NIF del usuario para buscar tickets</p>
+<hr>
+<h4 id="put-apiticketsticketid">PUT /api/tickets/ticket/{id}</h4>
+<p>Actualiza un ticket con el ID proporcionado.</p>
+<p><strong>Método HTTP</strong>: PUT</p>
+<p><strong>Consumo</strong>: <code>application/json</code></p>
+<p><strong>Devuelve</strong>: <code>application/json</code></p>
+<p><strong>Variable de ruta</strong>: <code>id</code> - ID del ticket a actualizar</p>
+<p><strong>Cuerpo de la solicitud</strong>: Representación JSON actualizada de <code>Ticket</code></p>
+<hr>
+<h3 id="manejo-de-errores">Manejo de Errores</h3>
+<ul>
+<li><code>BAD_REQUEST</code> (400): Formato de datos de entrada inválido.</li>
+<li><code>NO_CONTENT</code> (204): Ticket con el ID o criterio especificado no encontrado.</li>
+</ul>
+
+            
+            
+        </body>
+        </html>
