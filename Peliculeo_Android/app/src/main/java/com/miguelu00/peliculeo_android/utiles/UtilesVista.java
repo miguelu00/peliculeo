@@ -11,4 +11,8 @@ public class UtilesVista {
     public static void sacarToast(Context ctx, String msg) {
         Toast.makeText(ctx, msg, Toast.LENGTH_LONG).show();
     }
+
+    public static void sacarToast(Context ctx, String msg, int longitudTOAST) {
+        Toast.makeText(ctx, msg, longitudTOAST).show();
+    }
 }

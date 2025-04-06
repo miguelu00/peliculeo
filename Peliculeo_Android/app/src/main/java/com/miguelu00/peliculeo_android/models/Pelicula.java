@@ -1,5 +1,8 @@
 package com.miguelu00.peliculeo_android.models;
 
+import lombok.Data;
+
+@Data
 public class Pelicula {
 
     private int codPelicula;
@@ -10,6 +13,7 @@ public class Pelicula {
     private String genero;
 
     private int anio;
+    private String URLimg;
 
     public int getCodPelicula() {
         return codPelicula;
@@ -49,5 +53,12 @@ public class Pelicula {
 
     public void setAnio(int anio) {
         this.anio = anio;
+    }
+
+    public String getURLimg() {
+        return this.URLimg;
+    }
+    public void setURLimg(String urlImg) {
+        this.URLimg = urlImg;
     }
 }

@@ -2,11 +2,12 @@ package com.miguelu00.peliculeo_android.servicioAPI;
 
 import com.miguelu00.peliculeo_android.CFG_APP;
 
+import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitClient implements CFG_APP {
-    private static final String BASE_URL = "http://" + SERVER + ":" + PUERTO_HOST + "/api/"; // Cambia por la URL base de tu API
+    public static final String BASE_URL = "http://" + SERVER + ":" + PUERTO_HOST + "/api/";
     private static Retrofit retrofit = null;
 
     public static Retrofit getClient() {
@@ -16,6 +17,9 @@ public class RetrofitClient implements CFG_APP {
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
         }
+
         return retrofit;
     }
+
+
 }

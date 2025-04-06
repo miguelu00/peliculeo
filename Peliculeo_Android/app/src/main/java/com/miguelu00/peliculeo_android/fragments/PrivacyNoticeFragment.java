@@ -1,13 +1,6 @@
 package com.miguelu00.peliculeo_android.fragments;
 
 import android.annotation.SuppressLint;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-
 import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
@@ -18,6 +11,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
+
+import com.miguelu00.peliculeo_android.R;
 import com.miguelu00.peliculeo_android.databinding.FragmentPrivacyNoticeBinding;
 
 /**
@@ -66,8 +67,9 @@ public class PrivacyNoticeFragment extends Fragment {
             }
             ActionBar actionBar = getSupportActionBar();
             if (actionBar != null) {
-                actionBar.hide();
+                //actionBar.hide();
             }
+
 
         }
     };
@@ -193,6 +195,8 @@ public class PrivacyNoticeFragment extends Fragment {
         // Schedule a runnable to remove the status and navigation bar after a delay
         mHideHandler.removeCallbacks(mShowPart2Runnable);
         mHideHandler.postDelayed(mHidePart2Runnable, UI_ANIMATION_DELAY);
+        NavHostFragment.findNavController(PrivacyNoticeFragment.this)
+                .navigate(R.id.action_FirstFragment_to_SecondFragment);
     }
 
     @SuppressLint("InlinedApi")
@@ -201,6 +205,7 @@ public class PrivacyNoticeFragment extends Fragment {
         mContentView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
                 | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
         mVisible = true;
+        binding.fullscreenContent.setVisibility(View.VISIBLE);
 
         // Schedule a runnable to display UI elements after a delay
         mHideHandler.removeCallbacks(mHidePart2Runnable);
