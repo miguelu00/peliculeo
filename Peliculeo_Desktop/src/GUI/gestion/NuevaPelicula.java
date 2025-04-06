@@ -20,6 +20,7 @@ import javax.help.HelpSet;
 import javax.help.HelpSetException;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 
 /**
  *
@@ -284,8 +285,13 @@ public class NuevaPelicula extends javax.swing.JDialog {
                 if (resultado == JFileChooser.APPROVE_OPTION) {
                     //Al aceptar, cambiar el texto de la ruta por la ruta elegida
                     File ficheroTmp = elegirFicherosWindow.getSelectedFile();
-                    imgFondo2 = new ImagenFondo2(ficheroTmp.getAbsoluteFile(), 1.0f);
-                    jPanelImagenFondoArrastable1.setFondoImg(imgFondo2);
+                    if (ficheroTmp.toString().startsWith("http:")) {
+                        imgFondo2 = new ImagenFondo2(elegirFicherosWindow.getSelectedFile(), 1.0f);
+                        jPanelImagenFondoArrastable1.setFondoImg(imgFondo2);
+                    } else {
+                        imgFondo2 = new ImagenFondo2(ficheroTmp.getAbsoluteFile(), 1.0f);
+                        jPanelImagenFondoArrastable1.setFondoImg(imgFondo2);
+                    }
                 }
                 if (resultado == JFileChooser.CANCEL_OPTION) {
                     //No hacer nada al cancelar
@@ -294,7 +300,11 @@ public class NuevaPelicula extends javax.swing.JDialog {
         });
     }
     private void jTFTituloKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTFTituloKeyReleased
-        
+        if (((JTextField)evt.getSource()).getText().isBlank()) {
+            jLabelError.setText("Falta nombre!");
+        } else {
+            jLabelError.setText("");
+        }
     }//GEN-LAST:event_jTFTituloKeyReleased
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -322,7 +332,7 @@ public class NuevaPelicula extends javax.swing.JDialog {
         try {
             ControladorPeliculas.agregarPelicula(pelicula);
         } catch (PeliculaYaExisteException peliYaExisteErr) {
-            JOptionPane.showMessageDialog(rootPane, peliYaExisteErr.getMessage(), "LA PEL�?CULA YA EXISTE!", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(rootPane, peliYaExisteErr.getMessage(), "LA PELICULA YA EXISTE!", JOptionPane.ERROR_MESSAGE);
         }
         
         //Actualizar la tabla de películas, y recargar la página

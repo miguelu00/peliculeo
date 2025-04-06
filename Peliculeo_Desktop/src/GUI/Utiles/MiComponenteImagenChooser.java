@@ -61,6 +61,7 @@ public class MiComponenteImagenChooser extends JPanel implements Serializable, M
                     File ficheroTmp = elegirFicherosWindow.getSelectedFile();
                     vistaTitulo.setText(ficheroTmp.getAbsolutePath());
                     fondoImg.setImagen(ficheroTmp.getAbsoluteFile());
+                    System.out.println(ficheroTmp.getAbsoluteFile().toString());
                 }
                 if (resultado == JFileChooser.CANCEL_OPTION) {
                     //No hacer nada al cancelar
@@ -69,6 +70,7 @@ public class MiComponenteImagenChooser extends JPanel implements Serializable, M
         }; 
         this.fondo = new File(RUTA_IMG_DEFAULT);
         
+        //Auto-agregarse el listener para doble clic
         this.addMouseListener(this);
         this.add(this.vistaTitulo);
         

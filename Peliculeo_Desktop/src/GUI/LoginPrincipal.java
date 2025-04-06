@@ -6,18 +6,24 @@ package GUI;
 
 import Controlador.CFG_APP;
 import GUI.Utiles.Vistas;
+import clienteapi.AuthAPIUtils;
+import gestionPeliculas.dto.Cliente;
 import java.awt.Image;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.MalformedURLException;
+import java.net.NetworkInterface;
 import java.net.URL;
+import java.util.Enumeration;
 import javax.help.HelpBroker;
 import javax.help.HelpSet;
 import javax.help.HelpSetException;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 
 /**
  *  TODO --> Cambiar este pseudo-login por el sistema real
@@ -35,6 +41,8 @@ public class LoginPrincipal extends javax.swing.JFrame implements CFG_APP {
         cargarAyudaJH(); //Cargar la ayuda de JavaHelp.
         cargarImagenLogo();
         this.setLocationRelativeTo(null); //Centrar la ventana
+        this.jMayusc.setVisible(false);
+        
         //Cambiar el icono de la aplicación
         try {
             this.setIconImage(ImageIO.read(new File(ICONO_APP).getAbsoluteFile()));
@@ -58,13 +66,14 @@ public class LoginPrincipal extends javax.swing.JFrame implements CFG_APP {
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabelPW = new javax.swing.JLabel();
-        jTextFieldNombreUsu = new javax.swing.JTextField();
+        jTextNombreUsuario = new javax.swing.JTextField();
         jPasswordFieldPW = new javax.swing.JPasswordField();
         jLabel2 = new javax.swing.JLabel();
         labelIMG = new javax.swing.JLabel();
+        jMayusc = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Login - CINE DE VERANO");
+        setTitle("Login - Peliculeo! Desktop");
         setResizable(false);
 
         jPanel1.setLayout(new java.awt.BorderLayout());
@@ -79,14 +88,26 @@ public class LoginPrincipal extends javax.swing.JFrame implements CFG_APP {
         });
         jPanel1.add(jButton1, java.awt.BorderLayout.PAGE_END);
 
-        jLabel1.setLabelFor(jTextFieldNombreUsu);
-        jLabel1.setText("Nombre Usuario");
+        jLabel1.setLabelFor(jTextNombreUsuario);
+        jLabel1.setText("NIF Usuario");
 
         jLabelPW.setLabelFor(jPasswordFieldPW);
         jLabelPW.setText("Password");
 
-        jTextFieldNombreUsu.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jTextFieldNombreUsu.setText("admin");
+        jTextNombreUsuario.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jTextNombreUsuario.setText("admin");
+        jTextNombreUsuario.setToolTipText("");
+        jTextNombreUsuario.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jTextNombreUsuarioKeyPressed(evt);
+            }
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextNombreUsuarioKeyReleased(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextNombreUsuarioKeyTyped(evt);
+            }
+        });
 
         jPasswordFieldPW.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
@@ -98,6 +119,8 @@ public class LoginPrincipal extends javax.swing.JFrame implements CFG_APP {
         jLabel2.setText("F1 - Ayuda");
         jLabel2.setToolTipText("");
         jLabel2.setEnabled(false);
+
+        jMayusc.setText("! MÁYUS. ACTIVADAS");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -115,29 +138,33 @@ public class LoginPrincipal extends javax.swing.JFrame implements CFG_APP {
                             .addComponent(jLabelPW, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jTextFieldNombreUsu, javax.swing.GroupLayout.DEFAULT_SIZE, 168, Short.MAX_VALUE)
-                            .addComponent(jPasswordFieldPW)))
+                            .addComponent(jTextNombreUsuario, javax.swing.GroupLayout.DEFAULT_SIZE, 168, Short.MAX_VALUE)
+                            .addComponent(jPasswordFieldPW))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jMayusc))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(97, 97, 97)
                         .addComponent(labelIMG, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(136, Short.MAX_VALUE))
+                .addContainerGap(67, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(labelIMG, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jTextFieldNombreUsu)
+                    .addComponent(jTextNombreUsuario)
                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabelPW, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPasswordFieldPW, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(35, 35, 35))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabelPW, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jPasswordFieldPW, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jMayusc, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(37, 37, 37))
         );
 
         jPanel1.add(jPanel2, java.awt.BorderLayout.CENTER);
@@ -152,20 +179,69 @@ public class LoginPrincipal extends javax.swing.JFrame implements CFG_APP {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jPasswordFieldPWKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jPasswordFieldPWKeyReleased
-        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            ingresar();
+        switch(evt.getKeyCode()) {
+            case KeyEvent.VK_ENTER:
+                ingresar();
+                break;
+            case KeyEvent.VK_CAPS_LOCK:
+                jMayusc.setVisible(!jMayusc.isVisible());
+            default:
+                break;
         }
     }//GEN-LAST:event_jPasswordFieldPWKeyReleased
 
+    private void jTextNombreUsuarioKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextNombreUsuarioKeyReleased
+        switch(evt.getKeyCode()) {
+            case KeyEvent.VK_ENTER:
+                ingresar();
+                break;
+            case KeyEvent.VK_CAPS_LOCK:
+                jMayusc.setVisible(!jMayusc.isVisible());
+            default:
+                break;
+        }
+    }//GEN-LAST:event_jTextNombreUsuarioKeyReleased
+
+    private void jTextNombreUsuarioKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextNombreUsuarioKeyTyped
+        // Evitar que se pueda escribir más allá de 75 caracteres (por seguridad)
+        if (jTextNombreUsuario.getText().length() <= 74) {
+            return;
+        }
+        evt.consume();
+    }//GEN-LAST:event_jTextNombreUsuarioKeyTyped
+
+    private void jTextNombreUsuarioKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextNombreUsuarioKeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextNombreUsuarioKeyPressed
+
     public void ingresar() {
-        if (jTextFieldNombreUsu.getText().equals("admin") && new String(jPasswordFieldPW.getPassword()).equals(PASSWORD_ADMIN)) {
+        String tfNombreUser = jTextNombreUsuario.getText();
+        char[] PW = jPasswordFieldPW.getPassword();
+        if (tfNombreUser.equals("admin") && new String(PW).equals(PASSWORD_ADMIN)) {
             System.out.println("Ingresado al Sistema correctamente!");
             pantallaPpal ventanaPrincipal = new pantallaPpal();
             ventanaPrincipal.setVisible(true);
             this.dispose();
             this.setVisible(false);
         } else {
-            Vistas.mostrarErrorGUI(rootPane, "CREDENCIALES INCORRECTAS!", "Las credenciales introducidas no coinciden\ncon las de ningún usuario del Sistema!");
+            Cliente c = new Cliente();
+            c.setDNI(tfNombreUser);
+            c.setPassword(new String(PW));
+            try {
+                String res = AuthAPIUtils.sendLoginRequest(c);
+                
+                if (res.toUpperCase().contains("FALL")) {
+                    Vistas.mostrarErrorGUI(rootPane, "ERROR al ingresar!", "Contraseña incorrecta!");
+                    return;
+                }
+                System.out.println("Ingresado al Sistema correctamente!");
+                pantallaPpal ventanaPrincipal = new pantallaPpal();
+                ventanaPrincipal.setVisible(true);
+                this.dispose();
+                this.setVisible(false);
+            } catch (Exception ioe) {
+                JOptionPane.showMessageDialog(rootPane, ioe.getMessage());
+            }
         }
     }
     
@@ -242,6 +318,30 @@ public class LoginPrincipal extends javax.swing.JFrame implements CFG_APP {
         } catch (IOException ioe) {
             Vistas.mostrarErrorGUI(rootPane, "ERROR al cargar la imágen de Logotipo", ioe.getMessage());
         }
+        
+        //printInetAddress();
+    }
+    
+    public void printInetAddress() {
+        try {
+        Enumeration lista = NetworkInterface.getNetworkInterfaces();
+            while(lista.hasMoreElements()) {
+                NetworkInterface nint = (NetworkInterface) lista.nextElement();
+                Enumeration<InetAddress> inetAddresses = nint.getInetAddresses();
+                if (nint.getName().contains("wlan")) {
+                    while (inetAddresses.hasMoreElements()) {
+                    InetAddress inetAddress = inetAddresses.nextElement();
+                        // Ignore loopback and non-site-local addresses (ensures it's from Wi-Fi or Ethernet)
+                        if (!inetAddress.isLoopbackAddress() && inetAddress.isSiteLocalAddress()) {
+                            System.out.println(inetAddress.toString().substring(1, inetAddress.toString().length()));
+                        }
+                    }
+                }
+                //System.out.println(ipaddr + " - " + nint.getDisplayName());
+            }
+        } catch (Exception unk) {
+            System.out.println(unk.getMessage());
+        }
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -249,10 +349,11 @@ public class LoginPrincipal extends javax.swing.JFrame implements CFG_APP {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabelPW;
+    private javax.swing.JLabel jMayusc;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPasswordField jPasswordFieldPW;
-    private javax.swing.JTextField jTextFieldNombreUsu;
+    private javax.swing.JTextField jTextNombreUsuario;
     private javax.swing.JLabel labelIMG;
     // End of variables declaration//GEN-END:variables
 

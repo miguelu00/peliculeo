@@ -5,14 +5,17 @@
 package GUI.gestion;
 
 import Controlador.ControladorPeliculas;
-import GUI.Utiles.ImageResize;
+import Exceptions.PeliculaNoExisteException;
 import GUI.Utiles.Vistas;
 import gestionPeliculas.dto.Pelicula;
+import gestionPeliculas.dto.PosterPelicula;
 import gestionPeliculas.dto.UtilesFecha;
 import java.awt.Font;
 import java.io.File;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.file.Files;
 import javax.help.HelpBroker;
 import javax.help.HelpSet;
 import javax.help.HelpSetException;
@@ -306,7 +309,20 @@ public class ModificarPelicula extends javax.swing.JDialog {
             return;
         }
         
-        Pelicula editada = ControladorPeliculas.editarPelicula(p);
+        Pelicula editada = null;
+        try {
+            PosterPelicula peli = new PosterPelicula(p.getCodPelicula(), p.getTitulo(), Files.readAllBytes(customJLabelImagen1.getImgSelected().toPath()));
+            editada = ControladorPeliculas.editarPelicula(p, peli);
+        } catch (PeliculaNoExisteException err) {
+            Vistas.mostrarErrorGUI(rootPane, "ERROR! Pelicula no encontrada o API no iniciada!", err.getMessage());
+            this.setVisible(false);
+            this.dispose();
+            return;
+        } catch (IOException ioe) {
+            Vistas.mostrarErrorGUI(rootPane, "ERROR! No se pudo leer la imágen correctamente!", ioe.getMessage());
+            return;
+        }
+        
         if (editada != null) {
             Vistas.mostrarMensajeGUI(rootPane, "COMPLETADO!", "<html>"
                     + "La película <b>" + p.getCodPelicula() + "- " + p.getTitulo() + "</b> se ha actualizado correctamente!"
@@ -369,6 +385,7 @@ public class ModificarPelicula extends javax.swing.JDialog {
         }
         
         Pelicula p = ControladorPeliculas.getPeliculaByCodPelicula(codPelicula);
+        PosterPelicula poster = ControladorPeliculas.getPosterByCodPelicula(codPelicula);
         
         this.jTextFieldCodPelicula.setText(String.valueOf(p.getCodPelicula()));
         this.jTextFieldTituloPeli.setText(p.getTitulo());
@@ -377,6 +394,7 @@ public class ModificarPelicula extends javax.swing.JDialog {
                 UtilesFecha.fechaStrToDate(p.getFechaEstreno())
         );
         this.jSpinnerAnioPeli.setValue(String.valueOf(p.getAnio()));
+        this.customJLabelImagen1.setImgRoot(poster.getTempImg());
     }
     
     /**

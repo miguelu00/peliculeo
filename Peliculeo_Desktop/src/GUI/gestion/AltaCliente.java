@@ -63,6 +63,8 @@ public class AltaCliente extends javax.swing.JDialog {
         jTextFieldNIF = new javax.swing.JTextField();
         jLabelError = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
+        jLabelPW = new javax.swing.JLabel();
+        tfPassword = new javax.swing.JPasswordField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Dar de alta a un usuario....");
@@ -162,6 +164,8 @@ public class AltaCliente extends javax.swing.JDialog {
         jLabel1.setForeground(new java.awt.Color(0, 0, 0));
         jLabel1.setText("Introduce los datos del nuevo usuario...");
 
+        jLabelPW.setText("Contraseña");
+
         javax.swing.GroupLayout jPanelInputsLayout = new javax.swing.GroupLayout(jPanelInputs);
         jPanelInputs.setLayout(jPanelInputsLayout);
         jPanelInputsLayout.setHorizontalGroup(
@@ -180,23 +184,24 @@ public class AltaCliente extends javax.swing.JDialog {
                                     .addComponent(jLabelNombre1, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jLabelNombre2, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jLabelNombre3, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabelNIF, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(jLabelNIF, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabelPW, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(57, 57, 57)
                                 .addGroup(jPanelInputsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(jTextFieldApellidos)
                                     .addComponent(jTextFieldNombre)
                                     .addComponent(jSpinnerFechAlta)
                                     .addComponent(jComboBoxProvincia, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jTextFieldNIF)))
+                                    .addComponent(jTextFieldNIF)
+                                    .addComponent(tfPassword)))
                             .addGroup(jPanelInputsLayout.createSequentialGroup()
                                 .addGap(61, 61, 61)
-                                .addGroup(jPanelInputsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabelError, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(jPanelInputsLayout.createSequentialGroup()
-                                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jButton2)))))
-                        .addGap(0, 72, Short.MAX_VALUE)))
+                                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jButton2)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabelError, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 9, Short.MAX_VALUE)))
                 .addContainerGap())
             .addGroup(jPanelInputsLayout.createSequentialGroup()
                 .addContainerGap()
@@ -228,14 +233,16 @@ public class AltaCliente extends javax.swing.JDialog {
                 .addGroup(jPanelInputsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabelNombre3)
                     .addComponent(jComboBoxProvincia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
-                .addGroup(jPanelInputsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton3, javax.swing.GroupLayout.Alignment.TRAILING))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanelInputsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabelPW)
+                    .addComponent(tfPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
                 .addGroup(jPanelInputsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabelFoto)
-                    .addComponent(jLabelError, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabelError, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton3)
+                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
 
@@ -275,10 +282,15 @@ public class AltaCliente extends javax.swing.JDialog {
             jTextFieldApellidos.requestFocusInWindow();
             todoCorrecto = false;
         }
+        if (!tfPassword.echoCharIsSet()) {
+            jLabelError.setText("Introduce una contraseña!");
+            jTextFieldApellidos.requestFocusInWindow();
+            todoCorrecto = false;
+        }
         if (!todoCorrecto) {
             return;
         }
-        Cliente nuevo = new Cliente(DNI, nombre, apellidos, fecha, provincia);
+        Cliente nuevo = new Cliente(DNI, nombre, apellidos, new String(tfPassword.getPassword()), fecha, provincia);
         //Actualizar en BBDD con el Controlador
         //boolean hecho = LogicaAppClientes.agregarCliente(nuevo);
         try {
@@ -326,6 +338,7 @@ public class AltaCliente extends javax.swing.JDialog {
             jLabelError.setText("Introduce un NIF válido!");
             jTextFieldNIF.requestFocusInWindow();
             todoCorrecto = false;
+            return;
         }
         if (nombre.isBlank()) {
             jLabelError.setText("Escribe el nombre!");
@@ -340,7 +353,7 @@ public class AltaCliente extends javax.swing.JDialog {
         if (!todoCorrecto) {
             return;
         }
-        Cliente nuevo = new Cliente(DNI, nombre, apellidos, fecha, provincia);
+        Cliente nuevo = new Cliente(DNI, nombre, apellidos, tfPassword.getPassword().toString(), fecha, provincia);
         //Actualizar en BBDD con el Controlador
         //boolean hecho = LogicaAppClientes.agregarCliente(nuevo);
         try {
@@ -442,11 +455,13 @@ public class AltaCliente extends javax.swing.JDialog {
     private javax.swing.JLabel jLabelNombre1;
     private javax.swing.JLabel jLabelNombre2;
     private javax.swing.JLabel jLabelNombre3;
+    private javax.swing.JLabel jLabelPW;
     private javax.swing.JPanel jPanelInputs;
     private javax.swing.JPanel jPanelTitulo;
     private javax.swing.JSpinner jSpinnerFechAlta;
     private javax.swing.JTextField jTextFieldApellidos;
     private javax.swing.JTextField jTextFieldNIF;
     private javax.swing.JTextField jTextFieldNombre;
+    private javax.swing.JPasswordField tfPassword;
     // End of variables declaration//GEN-END:variables
 }

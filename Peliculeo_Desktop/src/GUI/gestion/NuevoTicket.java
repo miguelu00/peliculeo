@@ -17,7 +17,8 @@ import gestionPeliculas.dto.UtilesFecha;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import javax.help.HelpBroker;
 import javax.help.HelpSet;
@@ -46,6 +47,8 @@ public class NuevoTicket extends javax.swing.JDialog {
         rellenarComboBoxPelis();
         rellenarComboBoxClientes();
         padre = (pantallaPpal) parent;
+        
+        
         this.setLocationRelativeTo(null);
         cargarAyudaJH();
     }
@@ -239,7 +242,7 @@ public class NuevoTicket extends javax.swing.JDialog {
     }//GEN-LAST:event_jButtonVolverActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        //Sacar identificadores para CLIENTE y PEL�?CULA
+        //Sacar identificadores para CLIENTE y PELICULA
         String strListaPelicula = this.jComboBoxListaPelis.getSelectedItem().toString();
         int codPelicula = Integer.parseInt(strListaPelicula.substring(strListaPelicula.indexOf("=")+1, strListaPelicula.indexOf("}")));
         String filaClienteSeleccionado = jComboBoxClientes.getSelectedItem().toString();
@@ -249,7 +252,10 @@ public class NuevoTicket extends javax.swing.JDialog {
         String fechaEmision = UtilesFecha.spinnerFechaToStringDate(
             this.jSpinnerFechaEm.getValue());
         
-        Ticket nuevo = new Ticket(0, codPelicula, NIFCliente);
+        Ticket nuevo = new Ticket();
+        nuevo.setCodPelicula(codPelicula);
+        nuevo.setNifCliente(NIFCliente);
+        nuevo.setIdTicket(0);
         
         Ticket insertado = ControladorTickets.nuevoTicket(nuevo);
             
@@ -277,20 +283,33 @@ public class NuevoTicket extends javax.swing.JDialog {
     }//GEN-LAST:event_jComboBoxListaPelisItemStateChanged
 
     public void actualizarFechaEstreno() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        
         String strListaPelicula = this.jComboBoxListaPelis.getSelectedItem().toString();
         int codPelicula = Integer.parseInt(strListaPelicula.substring(strListaPelicula.indexOf("=")+1, strListaPelicula.indexOf("}")));
         //Settear la fecha de emisión a la que tenga la película seleccionada.
         Pelicula peliSelect = ControladorPeliculas.getPeliculaByCodPelicula(codPelicula);
-        this.jSpinnerFechaEm.setValue(
-                UtilesFecha.fechaStrToDate(peliSelect.getFechaEstreno())
-        );
+        Date fechaPeli = new Date();
+        if (peliSelect.getFechaEstreno().contains("/")) {
+            fechaPeli = UtilesFecha.fechaStrToDate(peliSelect.getFechaEstreno());
+        } else {
+            try {
+                fechaPeli = dateFormat.parse(peliSelect.getFechaEstreno());
+            } catch (Exception e) {
+                System.err.println(e.getMessage());
+            }
+        }
+            this.jSpinnerFechaEm.setValue(
+                fechaPeli
+            );
+        
     }
     
     /**
      * LIMPIAR Y RELLENAR el combobox de Pelis
      */
     public void rellenarComboBoxPelis() {
-        ArrayList<Pelicula> peliculas = ControladorPeliculas.getListaPeliculas();
+        List<Pelicula> peliculas = ControladorPeliculas.getListaPeliculas();
         modeloCBoxPeliculas.removeAllElements();
         for (Pelicula p: peliculas) {
             modeloCBoxPeliculas.addElement(p.toStringListado());
@@ -376,6 +395,32 @@ public class NuevoTicket extends javax.swing.JDialog {
             System.err.println(urlErr.getMessage());
         }
     }
+    
+    /*
+        //Codigo para conseguir la direccion local de la interfaz wifi
+        public static String getLocalServer() {
+        try {
+            Enumeration lista = NetworkInterface.getNetworkInterfaces();
+            while(lista.hasMoreElements()) {
+                NetworkInterface nint = (NetworkInterface) lista.nextElement();
+                Enumeration<InetAddress> inetAddresses = nint.getInetAddresses();
+                if (nint.getName().contains("wlan")) {
+                    while (inetAddresses.hasMoreElements()) {
+                        InetAddress inetAddress = inetAddresses.nextElement();
+                        // Ignore loopback and non-site-local addresses (ensures it's from Wi-Fi or Ethernet)
+                        if (!inetAddress.isLoopbackAddress() && inetAddress.isSiteLocalAddress()) {
+                            return inetAddress.toString().substring(1, inetAddress.toString().length());
+                        }
+                    }
+                }
+                //System.out.println(ipaddr + " - " + nint.getDisplayName());
+            }
+        } catch (Exception unk) {
+            System.out.println(unk.getMessage());
+        }
+        return "127.0.0.1";
+    }
+    */
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private pruebaimageresize_cambio.CustomJLabelImagen customJLabelImagenPeli;

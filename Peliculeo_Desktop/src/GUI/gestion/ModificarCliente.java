@@ -12,6 +12,7 @@ import gestionPeliculas.dto.Cliente;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import javax.help.HelpBroker;
 import javax.help.HelpSet;
@@ -122,7 +123,7 @@ public class ModificarCliente extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        if (JOptionPane.showConfirmDialog(this, "¿Cancelar la modificación del Usuario", "Confirmación", JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE) == JOptionPane.CANCEL_OPTION) {
+        if (JOptionPane.showConfirmDialog(this, "¿Cancelar la modificación del Usuario?", "Confirmación", JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE) == JOptionPane.CANCEL_OPTION) {
             return;
         }
         this.setVisible(false);
@@ -135,8 +136,9 @@ public class ModificarCliente extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(rootPane, "NO HAY USUARIOS INTRODUCIDOS!", "ERROR Lista de Usuarios vacía", JOptionPane.ERROR_MESSAGE);
             return;
         }
+        //Obtener el usuario a través de su toString -> recoger NIF (primer arg.)
         String usuarioSelect = this.jComboBoxListadoCli.getSelectedItem().toString();
-        String DNIUser = usuarioSelect.substring(0, 9);
+        String DNIUser = usuarioSelect.split(" ")[0];
         
         padre.empezarModificacion(ControladorClientes.getClienteByNIF(DNIUser));
         this.setVisible(false);
@@ -198,7 +200,7 @@ public class ModificarCliente extends javax.swing.JDialog {
         
         DefaultComboBoxModel dcbm = (DefaultComboBoxModel) cbm;
         this.jComboBoxListadoCli.setModel(dcbm);
-        List<Cliente> listaClientes = null;
+        List<Cliente> listaClientes = new ArrayList<>();
         try {
             listaClientes = ControladorClientes.getListaCliente();
         } catch (ErrorListadoClientesException listadoErr) {

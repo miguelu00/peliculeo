@@ -51,6 +51,7 @@ public class pantallaPpal extends javax.swing.JFrame {
     //Array para almacenar más tarde, en el constructor, los distintos temas L&F instalados en NetBeans
     UIManager.LookAndFeelInfo[] temasLAF = null;
     
+    private String usuario = "";
     private static final String ICONO_APP = "src/icon.png";
     private DefaultTableModel modeloTablaESTRENOS;
     private DefaultTableModel modeloTablaTICKETS;
@@ -70,7 +71,6 @@ public class pantallaPpal extends javax.swing.JFrame {
             errIO.printStackTrace();
         }
         
-        
         cargarListadoLookAndFeel();
         mostrarFotoPerfilDF();//hacer que la foto de perfil muestre una por defecto
         cargarAyudaJH(); //Cargar la ayuda de JavaHelp.
@@ -79,7 +79,11 @@ public class pantallaPpal extends javax.swing.JFrame {
         }
     
     public void mostrarFotoPerfilDF() {
-        this.customJLabelImagen1.setImgRoot("src/GUI/imgs/fotoPerfil.png");
+        this.customFotoPerfil.setImgRoot("src/GUI/imgs/fotoPerfil.png");
+    }
+    
+    public void setImgPerfil(String imgUri) {
+        this.customFotoPerfil.setImgRoot(imgUri);
     }
     
     public void cargarListadoLookAndFeel() {
@@ -102,6 +106,15 @@ public class pantallaPpal extends javax.swing.JFrame {
             }
             model.removeElementAt(0);
         }
+        
+        try {
+            //Settear el tema principal como el de 'Nimbus'
+            UIManager.setLookAndFeel(temasLAF[4].getClassName());
+        } catch (ClassNotFoundException cnotFound) {
+            
+        } catch (Exception e) {
+            System.err.println("Se ha producido un error extraño al aplicar el tema Nimbus");
+        }
     }
 
     /**
@@ -116,7 +129,7 @@ public class pantallaPpal extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
-        customJLabelImagen1 = new pruebaimageresize_cambio.CustomJLabelImagen();
+        customFotoPerfil = new pruebaimageresize_cambio.CustomJLabelImagen();
         jButtonToggleMain = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTableListaTickets = new javax.swing.JTable();
@@ -129,17 +142,18 @@ public class pantallaPpal extends javax.swing.JFrame {
         jMenuPeliculas = new javax.swing.JMenu();
         jMInuevaPelicula = new javax.swing.JMenuItem();
         jMenuItem1 = new javax.swing.JMenuItem();
+        jMenuItem2 = new javax.swing.JMenuItem();
         jMenuClientes = new javax.swing.JMenu();
         jMIEditarCliente = new javax.swing.JMenuItem();
         jMIEliminarCliente = new javax.swing.JMenuItem();
         jMIgestionPeliculas = new javax.swing.JMenuItem();
-        jSeparator1 = new javax.swing.JPopupMenu.Separator();
-        jMenuItem2 = new javax.swing.JMenuItem();
         jMenuAyuda = new javax.swing.JMenu();
         jMenuItemAyuda = new javax.swing.JMenuItem();
+        jSeparator1 = new javax.swing.JPopupMenu.Separator();
+        jMenuConfig = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("CINE DE VERANO");
+        setTitle("Peliculeo! Desktop - Gestión");
         setMinimumSize(new java.awt.Dimension(665, 550));
         setPreferredSize(new java.awt.Dimension(665, 550));
         addKeyListener(new java.awt.event.KeyAdapter() {
@@ -152,17 +166,17 @@ public class pantallaPpal extends javax.swing.JFrame {
 
         jPanel3.setLayout(new java.awt.GridBagLayout());
 
-        customJLabelImagen1.setToolTipText("Doble clic para Editarme!");
-        customJLabelImagen1.setMaximumSize(new java.awt.Dimension(100, 100));
-        customJLabelImagen1.setMinimumSize(new java.awt.Dimension(100, 100));
-        customJLabelImagen1.setOpaque(true);
-        customJLabelImagen1.setPreferredSize(new java.awt.Dimension(100, 100));
+        customFotoPerfil.setToolTipText("Doble clic para Editarme!");
+        customFotoPerfil.setMaximumSize(new java.awt.Dimension(100, 100));
+        customFotoPerfil.setMinimumSize(new java.awt.Dimension(100, 100));
+        customFotoPerfil.setOpaque(true);
+        customFotoPerfil.setPreferredSize(new java.awt.Dimension(100, 100));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.gridheight = 2;
         gridBagConstraints.weighty = 0.1;
-        jPanel3.add(customJLabelImagen1, gridBagConstraints);
+        jPanel3.add(customFotoPerfil, gridBagConstraints);
 
         jButtonToggleMain.setIcon(new javax.swing.ImageIcon(getClass().getResource("/GUI/imgs/actualizarMain.png"))); // NOI18N
         jButtonToggleMain.setText("VER CARTELERA");
@@ -182,6 +196,7 @@ public class pantallaPpal extends javax.swing.JFrame {
         gridBagConstraints.weighty = 0.2;
         jPanel3.add(jButtonToggleMain, gridBagConstraints);
 
+        jTableListaTickets.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jTableListaTickets.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -319,6 +334,18 @@ public class pantallaPpal extends javax.swing.JFrame {
         });
         jMenuPeliculas.add(jMenuItem1);
 
+        jMenuItem2.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_C, java.awt.event.InputEvent.SHIFT_DOWN_MASK));
+        jMenuItem2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jMenuItem2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/GUI/imgs/confirmarEDIT.png"))); // NOI18N
+        jMenuItem2.setText("Cerrar Sesión");
+        jMenuItem2.setToolTipText("Abrir una ventana para DAR de ALTA a un CLIENTE en el sistema");
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem2ActionPerformed(evt);
+            }
+        });
+        jMenuPeliculas.add(jMenuItem2);
+
         jMenuBar1.add(jMenuPeliculas);
 
         jMenuClientes.setText("Editar");
@@ -382,12 +409,6 @@ public class pantallaPpal extends javax.swing.JFrame {
             }
         });
         jMenuClientes.add(jMIgestionPeliculas);
-        jMenuClientes.add(jSeparator1);
-
-        jMenuItem2.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_J, java.awt.event.InputEvent.CTRL_DOWN_MASK));
-        jMenuItem2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/GUI/imgs/configIcon3.png"))); // NOI18N
-        jMenuItem2.setText("Configuración...");
-        jMenuClientes.add(jMenuItem2);
 
         jMenuBar1.add(jMenuClientes);
 
@@ -407,6 +428,17 @@ public class pantallaPpal extends javax.swing.JFrame {
         jMenuItemAyuda.setText("Ayuda de la App");
         jMenuItemAyuda.setToolTipText("Mostrar la ventana de Ayuda");
         jMenuAyuda.add(jMenuItemAyuda);
+        jMenuAyuda.add(jSeparator1);
+
+        jMenuConfig.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_J, java.awt.event.InputEvent.CTRL_DOWN_MASK));
+        jMenuConfig.setIcon(new javax.swing.ImageIcon(getClass().getResource("/GUI/imgs/configIcon3.png"))); // NOI18N
+        jMenuConfig.setText("Acerca de...");
+        jMenuConfig.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuConfigActionPerformed(evt);
+            }
+        });
+        jMenuAyuda.add(jMenuConfig);
 
         jMenuBar1.add(jMenuAyuda);
 
@@ -523,6 +555,14 @@ public class pantallaPpal extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jTableListaTicketsKeyPressed
 
+    /**
+     * Devuelve un string codificado en SHA256 representando 
+     * @return 
+     */
+    public String getUserSHA() {
+        return this.usuario;
+    }
+    
     private void jButtonToggleMainActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonToggleMainActionPerformed
         toggleVistaCartelera();
         toggleVistaBotones();
@@ -627,6 +667,15 @@ public class pantallaPpal extends javax.swing.JFrame {
     private void jComboBox1LookAndFeelKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jComboBox1LookAndFeelKeyTyped
         evt.consume();
     }//GEN-LAST:event_jComboBox1LookAndFeelKeyTyped
+
+    private void jMenuConfigActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuConfigActionPerformed
+        
+    }//GEN-LAST:event_jMenuConfigActionPerformed
+
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+        new LoginPrincipal().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -781,7 +830,6 @@ public class pantallaPpal extends javax.swing.JFrame {
         if (JOptionPane.showConfirmDialog(rootPane, "¿Seguro que quiere salir de la Aplicación?", "Salir", JOptionPane.OK_CANCEL_OPTION) != JOptionPane.CANCEL_OPTION){
             this.setVisible(false);
             this.dispose();
-            System.out.println("El usuario salió del programa");
             System.exit(0);
         }
     }
@@ -834,6 +882,12 @@ public class pantallaPpal extends javax.swing.JFrame {
             numFilas = modeloTablaESTRENOS.getRowCount();
         }
         List<Pelicula> listaPeliculas = ControladorPeliculas.getListaPeliculas();
+        if (listaPeliculas == null) {
+            Vistas.mostrarErrorGUI(rootPane, "SERVER DESCONECTADO", 
+                    "Se ha perdido la conexión con el servidor\n"
+                    + "Inténtelo de nuevo más tarde");
+            return;
+        }
         for (Pelicula p: listaPeliculas) {
             modeloTablaESTRENOS.addRow(p.toArrayString());
         }
@@ -879,7 +933,7 @@ public class pantallaPpal extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private pruebaimageresize_cambio.CustomJLabelImagen customJLabelImagen1;
+    private pruebaimageresize_cambio.CustomJLabelImagen customFotoPerfil;
     private javax.swing.JButton jButtonAgregarX;
     private javax.swing.JButton jButtonEliminarX;
     private javax.swing.JButton jButtonToggleMain;
@@ -892,6 +946,7 @@ public class pantallaPpal extends javax.swing.JFrame {
     private javax.swing.JMenu jMenuAyuda;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenu jMenuClientes;
+    private javax.swing.JMenuItem jMenuConfig;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItemAyuda;

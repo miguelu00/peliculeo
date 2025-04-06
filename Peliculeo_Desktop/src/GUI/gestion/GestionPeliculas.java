@@ -182,6 +182,7 @@ public class GestionPeliculas extends javax.swing.JDialog {
         int selectedIndex = this.jListPeliculas.getSelectedIndex();
         if (this.jListPeliculas.getSelectedIndices().length > 1) {
             mostrarError("Para modificar, SELECCIONAR SOLAMENTE UNA PELÍCULA POR FAVOR!", "Imposible Editar!");
+            return;
         }
         //Comprobar si no hemos seleccionado nada en la lista, o bien si lo seleccionado está vacío
         if (selectedItem == null) {
@@ -189,7 +190,7 @@ public class GestionPeliculas extends javax.swing.JDialog {
             return;
         }
         if (selectedItem.isEmpty() || selectedItem.isBlank()) {
-            mostrarError("Ninguna película con datos seleccionado!", "Seleccione una película válida!");
+            mostrarError("Ninguna película con datos seleccionada!", "Seleccione una película válida!");
             return;
         }
         
