@@ -4,10 +4,9 @@
  */
 package Controlador;
 
+import clienteapi.TicketsAPIUtils;
 import gestionPeliculas.dto.Pelicula;
 import gestionPeliculas.dto.Ticket;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -17,11 +16,17 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author Miguelañez-PC
  * 
- * CLASE CONTROLADOR CON ARRAYLIST DE Objs. CLIENTE
+ * CLASE CONTROLADOR CON ARRAYLIST DE Objs. TICKET
  */
 public class ControladorTickets {
     private static List<Ticket> listaTickets = new ArrayList<>();
     
+    /**
+     * Insertará un nuevo objeto Ticket, llamando al método POST de la API, y
+     * agregandolo a la lista de Tickets.
+     * @param ticket
+     * @return 
+     */
     public static Ticket nuevoTicket(Ticket ticket) {
         
         //Pedirle a la base de datos la fecha de Estreno de la película elegida...
@@ -29,28 +34,47 @@ public class ControladorTickets {
         String fechaPeli = aux.getFechaEstreno();
 
         //Agregar tanto a la BBDD, como al List<Cliente>
-        boolean hecho = ControladorBBDD_mysql.hacerINSERT("tickets",
-                    "null,"
-                    + "'" + ticket.getNIFUsuario() + "',"
-                    + "" + ticket.getCodPelicula() + ","
-                    + "'" + fechaPeli + "'"
-                );
         
-        if (hecho) {
-            listaTickets.add(ticket);
-        } else {
+        String resultado = TicketsAPIUtils.sendPostRequest("add", ticket.toJSONString());
+        if (!CFG_APP.EN_PRODUCCION) {
+            System.out.println(resultado);
+        }
+        
+        boolean hecho = !resultado.toUpperCase().startsWith("FALL");
+        
+        if (!hecho) {
             return null;
         }
         
+        listaTickets.add(ticket);
         return ticket;
     }
     
+    /**
+     * Eliminará de la API, y de la lista de tickets local, el objeto Ticket
+     * pasado por parámetro.
+     * @param ticket
+     * @return
+     * @throws Exception 
+     */
     public static boolean eliminarTicket(Ticket ticket) throws Exception {
         if (ticket == null) {
             throw new Exception();
         }
         boolean found = false;
         
+        String resultado = TicketsAPIUtils.sendDeleteRequest(
+                String.valueOf(ticket.getIdTicket())
+        );
+        if (!CFG_APP.EN_PRODUCCION) {
+            System.out.println(resultado);
+        }
+        
+        if (resultado.toUpperCase().startsWith("FALL")) {
+            return false;
+        }
+        
+        //Si en este punto, no se ha retornado FALSE, significa que se ha borrado de la API correctamente
         for (Ticket t: listaTickets) {
             if (Objects.equals(t.getIdTicket(), ticket.getIdTicket())) {
                 found = true;
@@ -59,7 +83,6 @@ public class ControladorTickets {
         }
         
         if (found) {
-            ControladorBBDD_mysql.hacerDELETEID("tickets", "ID_ticket", ticket.getIdTicket());
             listaTickets.remove(ticket);
         }
         return found;
@@ -72,6 +95,18 @@ public class ControladorTickets {
         boolean found = false;
         Ticket aux = null;
         
+        String resultado = TicketsAPIUtils.sendDeleteRequest(
+                String.valueOf(IDTicket)
+        );
+        if (!CFG_APP.EN_PRODUCCION) {
+            System.out.println(resultado);
+        }
+        
+        //En caso de que falle la llamada a la API
+        if (resultado.toUpperCase().startsWith("FALL")) {
+            return false;
+        }
+        
         for (Ticket t: listaTickets) {
             if (Objects.equals(t.getIdTicket(), IDTicket)) {
                 found = true;
@@ -81,35 +116,34 @@ public class ControladorTickets {
         }
         
         if (found) {
-            ControladorBBDD_mysql.hacerDELETEID("tickets", "ID_ticket", IDTicket);
-            listaTickets.remove(aux); //...para eliminarlo junto al ticket en BBDD; si no hacemos esto así, nos aparecerá un ConcurrentModificationException
+            listaTickets.remove(aux); //Se debe eliminar aquí el objeto Ticket, ya que si tratamos de hacerlo en el for de arriba, nos saltaría una ConcurrentOperationException
+            
         }
         return found;
     }
     
-    public static List<Ticket> actualizarListaDesdeBBDD() {
-        listaTickets = new ArrayList<Ticket>();
-        Ticket tAux = null;
+    public static List<Ticket> actualizarListaDesdeBBDD() {        
+        String resultado = TicketsAPIUtils.sendGetRequest("");
         
-        try {
-            ResultSet res = ControladorBBDD_mysql.hacerSELECT("tickets", "*");
+        System.out.println(resultado);
         
-            while (res.next()) {
-                tAux = new Ticket(
-                        res.getInt("ID_ticket"),
-                        res.getInt("codPelicula"),
-                        res.getString("NIF_cliente")
-                );
-                listaTickets.add(tAux);
-            }
-        } catch (SQLException sqlErr) {
-            System.err.println("ERROR SQL! -> " + sqlErr.getMessage());
+        if (resultado.toUpperCase().startsWith("FALL")) {
+            return new ArrayList<Ticket>();
         }
         
-        
+        //Conseguir listado de Tickets llamando a la API
+        listaTickets = Ticket.getArrayTicketsFromJSON(resultado);
+        if (listaTickets == null) {
+            return new ArrayList<Ticket>();
+        }
         return listaTickets;
     }
     
+    /**
+     * Actualizará el ArrayList de Cliente's actual a partir de los datos introducidos en la tabla de Tickets
+     * Así, se mantendrá bien reflejado siempre el orden en ambos listados
+     * @param modeloT El DefaultTableModel (swing) proveniente de la tabla en GUI.
+     */
     public static void actualizarListaDesdeTablaGUI(DefaultTableModel modeloT) {
         int numColumnas = modeloT.getColumnCount();
         int numFilas = modeloT.getRowCount();
@@ -132,29 +166,6 @@ public class ControladorTickets {
         }
     }
     
-    /**
-     * Evaluará si la lista de Peliculas de este controlador contiene alguna película con el NOMBRE y AÑO (ANIO) pasados.
-     * Realiza la comprobación directamente en la BASE DE DATOS.
-     * @param NIFusuario El DNI/NIF del Usuario a encontrar, en STRING.
-     * @return TRUE si existe una entrada con el NIF especificado, FALSE si no.
-     */
-    public static boolean existeCliente(String NIFusuario) {
-        ResultSet res = ControladorBBDD_mysql.hacerSELECT("clientes", "*");
-        
-        try {
-            while (res.next()) {
-                if (Objects.equals(res.getString("NIF"), NIFusuario)) {
-                    return true;
-                }
-            }
-        } catch (SQLException sqlErr) {
-            System.err.println("ERROR SQL => " + sqlErr.getMessage());
-        }
-        
-        
-        return false;
-    }
-    
     public static int getCodPelicula(int indiceLista) {
         return listaTickets.get(indiceLista).getCodPelicula();
     }
@@ -168,7 +179,7 @@ public class ControladorTickets {
     }
     
     /**
-     * 
+     * Conseguir un ticket del listado por ID pasado por parámetro.
      * @param NIF
      * @return Cliente|NULL
      */
@@ -186,7 +197,7 @@ public class ControladorTickets {
     
     /**
      * Actualizará la lista de Tickets (desde la BBDD), y devolverá el List de TICKETS del controlador.
-     * @return Un <b>List<Ticket></b> con el listado de TICKETS actual (actualizado cada vez desde la BBDD)
+     * @return Un <b>List<Ticket></b> con el listado de TICKETS actual (actualizado cada vez desde la API)
      */
     public static List<Ticket> getListaTickets() {
         actualizarListaDesdeBBDD();

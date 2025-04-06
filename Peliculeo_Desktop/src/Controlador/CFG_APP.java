@@ -10,7 +10,11 @@ package Controlador;
  */
 public interface CFG_APP {
     
-    String PASSWORD_ADMIN = "1234";
+    boolean EN_PRODUCCION = false;
+    String PASSWORD_ADMIN = "sisi1234";
+    
+    String API_HOST = "localhost";
+    String PUERTO_HOST= "9001";
     String ICONO_APP = "src/GUI/imgs/logo.png";
     String RUTA_IMG = "src/GUI/imgs/peliculeo_logo.png";
 }

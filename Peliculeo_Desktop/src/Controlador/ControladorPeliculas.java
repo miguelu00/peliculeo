@@ -1,17 +1,16 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package Controlador;
 
+import Exceptions.PeliculaNoExisteException;
 import Exceptions.PeliculaYaExisteException;
+import GUI.Utiles.Vistas;
+import clienteapi.PeliculasAPIUtils;
 import gestionPeliculas.dto.Pelicula;
+import gestionPeliculas.dto.PosterPelicula;
 import gestionPeliculas.dto.UtilesFecha;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Objects;
+import java.util.List;
+import javax.swing.JPanel;
 
 /**
  *
@@ -19,7 +18,8 @@ import java.util.Objects;
  */
 public class ControladorPeliculas {
     
-    private static ArrayList<Pelicula> listaPeliculas = new ArrayList<>();
+    private static List<Pelicula> listaPeliculas = new ArrayList<>();
+    private static List<PosterPelicula> listaPosters = new ArrayList<>();
     
     public static boolean agregarPelicula(Pelicula pelicula) throws PeliculaYaExisteException {
         if (pelicula == null) {
@@ -27,39 +27,59 @@ public class ControladorPeliculas {
         }
         
         boolean hechoBD = false;
-        boolean existe = existePelicula(pelicula.getTitulo(), pelicula.getAnio());
+        //No hace falta comprobar si existe antes la pelicula, ya que su campo ID
+        //  es auto-generado por el servidor SPRING + Hibernate
         
-        
-        
-        if (!existe) {
-            hechoBD = ControladorBBDD_mysql.hacerINSERT("peliculas", "null, '" + pelicula.getTitulo() + "', "
-                    + "'" + pelicula.getGenero() + "', "
-                    + "'" + pelicula.getFechaEstreno() + "', "
-                    + "'" + pelicula.getAnio() + "'");
+        //Comprobar si existe una película con el mismo combo título-año
+        if (!existePelicula(pelicula.getTitulo(), pelicula.getAnio())) {
+            hechoBD = !PeliculasAPIUtils.sendPostRequest(
+                            "",
+                            pelicula.toJSONString()
+                    ).toUpperCase().startsWith("FALL");
         } else {
             throw new PeliculaYaExisteException();
         }
         
         if (hechoBD) {
-            //Agregar al ArrayList
+            //Agregar al ArrayList local
             listaPeliculas.add(pelicula);
         } else {
-            System.err.println("ERROR Al insertar en la base de datos!");
+            Vistas.mostrarErrorGUI(new JPanel().getRootPane(), "ERROR inserción de película", "ERROR Al insertar en la base de datos!");
             return false;
         }
         return true;
     }
     
-    public static Pelicula editarPelicula(Pelicula pelicula) {
+    public static Pelicula editarPelicula(Pelicula pelicula, PosterPelicula poster) throws PeliculaNoExisteException {
         actualizarListaDesdeBBDD();
         Pelicula aux = null;
-        for (Pelicula p: listaPeliculas) {
-            if (p.getCodPelicula() == pelicula.getCodPelicula()) {
-                aux = p;
+        
+        boolean hechoBD;
+        boolean existe = !PeliculasAPIUtils.sendGetRequest(
+                    String.valueOf(pelicula.getCodPelicula())
+                ).toUpperCase().startsWith("FALL");
+        
+        //Lo mismo en caso de que no se pudiera agregar la película
+        if (existe) {
+            String resultado = PeliculasAPIUtils.sendPutRequest(
+                            String.valueOf(pelicula.getCodPelicula()),
+                            pelicula.toJSONString()
+                    );
+            if (!CFG_APP.EN_PRODUCCION) {
+                System.out.println(resultado);
             }
+            hechoBD = !resultado.toUpperCase().startsWith("FALL");
+            if (!hechoBD) {
+                return null;
+            }
+            //Actualizar también el poster perteneciente al codPelicula
+            resultado = PeliculasAPIUtils.sendPostRequest(
+                            "/posters/" + String.valueOf(pelicula.getCodPelicula()),
+                            poster.toJSONString()
+                    );
+        } else {
+            throw new PeliculaNoExisteException();
         }
-        ControladorBBDD_mysql.hacerUPDATE("peliculas", new String[]{"titulo", pelicula.getTitulo(), "fechaEstreno", pelicula.getFechaEstreno(),
-            "genero", pelicula.getGenero(), "anio", String.valueOf(pelicula.getAnio())}, new String[]{"codPelicula", String.valueOf(pelicula.getCodPelicula())});
         
         actualizarListaDesdeBBDD();
         return pelicula;
@@ -68,21 +88,18 @@ public class ControladorPeliculas {
     public static Pelicula getPeliculaByCodPelicula(int codPelicula) {
         Pelicula peli = null;
         
-        try {
-            ResultSet rs = ControladorBBDD_mysql.hacerSELECTWHERE("peliculas", "*", new String[]{"codPelicula", String.valueOf(codPelicula)});
-            while (rs.next()) {
-                peli = new Pelicula();
-                peli.setCodPelicula(rs.getInt("codPelicula"));
-                peli.setGenero(rs.getString("genero"));
-                peli.setTitulo(rs.getString("titulo"));
-                peli.setFechaEstreno(rs.getString("fechaEstreno"));
-                peli.setAnio(rs.getInt("anio"));
-            }
-        } catch (SQLException sqlErr) {
-            System.err.println("ERROR SQL! -> " + sqlErr.getMessage());
+        String resultado = PeliculasAPIUtils.sendGetRequest(
+                    String.valueOf(codPelicula)
+                );
+        if (!CFG_APP.EN_PRODUCCION) {
+            System.out.println(resultado);
         }
         
-        return peli;
+        if (resultado.toUpperCase().startsWith("FALL")) {
+            return null;
+        }
+        
+        return Pelicula.getPeliculaFromJSON(resultado);
     }
     
     public static Pelicula getPeliculaByTitulo(String titulo) {
@@ -95,82 +112,124 @@ public class ControladorPeliculas {
         return null;
     }
     
-    public static Pelicula eliminarPeliculaPorCOD(int codPelicula) {
-        Pelicula encontrada = null;
-        for (Pelicula p: listaPeliculas) {
-            if (p.getCodPelicula() == codPelicula) {
-                encontrada = p;
-            }
-        }
-        boolean hecho = ControladorBBDD_mysql.hacerDELETE("peliculas", "codPelicula", String.valueOf(codPelicula));
-        if (hecho) {
-            actualizarListaDesdeBBDD();
-            listaPeliculas.remove(encontrada);
-            return encontrada;
+    public static PosterPelicula getPosterByCodPelicula(int codPelicula) {
+        actualizarPostersDesdeBBDD();
+        
+        for (PosterPelicula p: listaPosters) {
+            if (p.getCodPelicula() == codPelicula) { return p; }
         }
         return null;
     }
     
-    public static ArrayList<Pelicula> actualizarListaDesdeBBDD() {
-        listaPeliculas = new ArrayList<Pelicula>();
-        ArrayList<Integer> listaEstrenadas = new ArrayList<>();
-        Pelicula pAux = null;
+    public static Pelicula eliminarPeliculaPorCOD(int codPelicula) {
+        Pelicula encontrada = null;
         
-        try {
-            ResultSet res = ControladorBBDD_mysql.hacerSELECT("peliculas", "*");
-        
-            while (res.next()) {
-                pAux = new Pelicula(
-                    res.getInt("codPelicula"),
-                        res.getString("titulo"),
-                        res.getString("genero"),
-                        res.getString("fechaEstreno"),
-                        res.getInt("anio")
-                );
-                if (!yaSeEstreno(pAux)) {
-                    listaPeliculas.add(pAux);
-                } else {
-                    //si ya se ha estrenado, AGREGAR A LA LISTA DE ESTRENADAS.
-                    listaEstrenadas.add(res.getInt("codPelicula"));
-                }
-            }
-        } catch (SQLException sqlErr) {
-            System.err.println("ERROR SQL! -> " + sqlErr.getMessage());
+        String resultado = PeliculasAPIUtils.sendGetRequest(
+                String.valueOf(codPelicula)
+        );
+        if (!CFG_APP.EN_PRODUCCION) {
+            System.out.println(resultado);
+        }
+        if (resultado.toUpperCase().startsWith("FALL")) {
+            return null;
         }
         
-        //Eliminar de la base de datos las peliculas YA ESTRENADAS, si hay...
-        if (!listaEstrenadas.isEmpty()) {
-            for (int i: listaEstrenadas) {
-                ControladorBBDD_mysql.hacerDELETE("peliculas", "codPelicula", 
-                        String.valueOf(i));
-            }
+        //Si existe, enviar petición para eliminar la película
+        String eliminar = PeliculasAPIUtils.sendDeleteRequest(
+                String.valueOf(codPelicula)
+        );
+        if (eliminar.toUpperCase().startsWith("FALL")) {
+            return null;
         }
+        
+        actualizarListaDesdeBBDD();
+        
+        return new Pelicula();
+    }
+    
+    public static List<PosterPelicula> actualizarPostersDesdeBBDD() {
+        String resultado = PeliculasAPIUtils.sendGetRequest("posters/");
+        if (!CFG_APP.EN_PRODUCCION) {
+            System.out.println(resultado);
+        }
+        
+        //Si falla la llamada a la API, retornar NULL en la lista de Pelicula's
+        if (resultado.toUpperCase().endsWith("FALL")) {
+            return new ArrayList<PosterPelicula>();
+        }
+        //Sino, se recuperarán las películas del obj. List recogido desde la API
+        listaPosters = PosterPelicula.getArrayPostersFromJSON(resultado);
+        
+        
+        return listaPosters;
+    }
+    
+    /**
+     * Actualizar el listado local (ArrayList) de Pelicula, para reflejar el estado de la bbdd en esta capa de aplicación
+     * @return 
+     */
+    public static List<Pelicula> actualizarListaDesdeBBDD() {
+        String resultado = PeliculasAPIUtils.sendGetRequest("");
+        if (!CFG_APP.EN_PRODUCCION) {
+            System.out.println(resultado);
+        }
+        
+        //Si falla la llamada a la API, retornar NULL en la lista de Pelicula's
+        if (resultado.toUpperCase().endsWith("FALL")) {
+            return new ArrayList<Pelicula>();
+        }
+        //Sino, se recuperarán las películas del obj. List recogido desde la API
+        listaPeliculas = Pelicula.getArrayPeliculasFromJSON(resultado);
+        
+        
         return listaPeliculas;
     }
     
     /**
      * Evaluará si la lista de Peliculas de este controlador contiene alguna película con el NOMBRE y AÑO (ANIO) pasados.
-     * Realiza la comprobación directamente en la BASE DE DATOS.
+     * Realiza la comprobación directamente en la API.
      * @param nombrePelicula El nombre de la pelicula a encontrar, en STRING.
      * @param anio El año anio de la película a encontrar, dato ENTERO.
      * @return TRUE  si existe una entrada con el nombre Y el año especificados, FALSE si no.
      */
     public static boolean existePelicula(String nombrePelicula, int anio) {
-        ResultSet res = ControladorBBDD_mysql.hacerSELECT("peliculas", "*");
-        
-        try {
-            while (res.next()) {
-                if (Objects.equals(res.getString("titulo"), nombrePelicula) && Objects.equals(res.getInt("anio"), anio)) {
-                    return true;
-                }
-            }
-        } catch (SQLException sqlErr) {
-            System.err.println("ERROR SQL => " + sqlErr.getMessage());
+        ArrayList<Pelicula> encontradas = new ArrayList<Pelicula>();
+        boolean hecho = false;
+        String resultado = PeliculasAPIUtils.sendGetRequest("buscar/" + nombrePelicula);
+        if (!CFG_APP.EN_PRODUCCION) {
+                System.out.println(resultado);
         }
         
-        
-        return false;
+        if (!resultado.toUpperCase().startsWith("FALL")) {
+            return false;
+        }
+        //Si se ha logrado encontrar la película, o la petición ha pasado, comprobar si existe alguna con el mismo anio pasado
+        encontradas = (ArrayList<Pelicula>) Pelicula.getArrayPeliculasFromJSON(resultado);
+        for (Pelicula p : encontradas) {
+            if (p.getAnio() == anio && p.getTitulo().equals(nombrePelicula)) {
+                hecho = true;
+            }
+        }
+        return hecho;
     }
+    
+    /**
+     * Recogerá la IMG. del poster para la pelicula con código indicada
+     */
+    public static String getPosterPelicula(int codPelicula) {
+        
+        String resultado = PeliculasAPIUtils.sendGetRequest("posters/" + String.valueOf(codPelicula));        
+        if (!CFG_APP.EN_PRODUCCION) {
+            System.out.println(resultado);
+        }
+        
+        if (!resultado.toUpperCase().endsWith("FALL")) {
+            return PosterPelicula.getPosterFromJSON(resultado).getTempImg();
+        } else {
+            return "";
+        }
+    }
+    
     
     /**
      * Comparará la fecha de hoy con la fecha de estreno de la película que se indique.
@@ -188,9 +247,8 @@ public class ControladorPeliculas {
         );
     }
 
-    public static ArrayList<Pelicula> getListaPeliculas() {
+    public static List<Pelicula> getListaPeliculas() {
         actualizarListaDesdeBBDD();
         return listaPeliculas;
     }
-    
 }

@@ -7,9 +7,8 @@ package Controlador;
 import Exceptions.ClienteYaExisteException;
 import Exceptions.ErrorInsercionException;
 import Exceptions.ErrorListadoClientesException;
+import clienteapi.ClientesAPIUtils;
 import gestionPeliculas.dto.Cliente;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -29,18 +28,30 @@ public class ControladorClientes {
             throw new ClienteYaExisteException();
         }
         
-        //Agregar tanto a la BBDD, como al List<Cliente>
-        boolean hecho = ControladorBBDD_mysql.hacerINSERT("clientes",
-                "'" + cliente.getDNI() + "',"
-                        + "'" + cliente.getNombre() + "',"
-                        + "'" + cliente.getApellidos() + "',"
-                        + "'" + cliente.getFechAlta() + "',"
-                        + "'" + cliente.getProvincia() + "'");
+        //Agregar tanto a la BBDD, como al List<Cliente>, si se ha conseguido agregar por petición POST
+        String resultado = ClientesAPIUtils.sendPostRequest("", cliente.toJSONString());
         
+        if (!CFG_APP.EN_PRODUCCION) {
+            System.out.println(resultado);
+        }
+        
+        boolean hecho = !resultado.toUpperCase().startsWith("FALL");
+        if (!hecho) {
+            return;
+        }
         listaClientes.add(cliente);
     }
     
     public static boolean eliminarCliente(Cliente cli) {
+        String resultado = ClientesAPIUtils.sendDeleteRequest(cli.getDNI());
+        if (!CFG_APP.EN_PRODUCCION) {
+            System.out.println(resultado);
+        }
+        
+        if (resultado.toUpperCase().startsWith("FALL")) {
+            return false;
+        }
+        
         if (listaClientes.contains(cli)) {
             return listaClientes.remove(cli);
         }
@@ -50,6 +61,15 @@ public class ControladorClientes {
     public static Cliente eliminarClienteByNIF(String DNI) {
         Cliente aux = null;
         boolean hecho = false;
+        
+        String resultado = ClientesAPIUtils.sendDeleteRequest(DNI);
+        if (!CFG_APP.EN_PRODUCCION) {
+            System.out.println(resultado);
+        }
+        if (resultado.toUpperCase().startsWith("FALL")) {
+            return null;
+        }
+        
         for (Cliente c: listaClientes) {
             if (c.getDNI().equals(DNI)) {
                 aux = c;
@@ -58,39 +78,43 @@ public class ControladorClientes {
         }
         if (hecho) {
             listaClientes.remove(aux);
-            hecho = ControladorBBDD_mysql.hacerDELETE("clientes", "NIF", DNI);
-            if (hecho) {
-                return aux;
-            }
+            return aux;
         }
         return null;
     }
     
     public static boolean editarCliente(Cliente clienteCambiado) throws ErrorInsercionException {
         Cliente edit = ControladorClientes.getClienteByNIF(clienteCambiado.getDNI());
+        
+        boolean hecho = false;
         //Comprobar que el Cliente no es nulo
         if (edit == null) {
             throw new ErrorInsercionException("ERROR AL ACTUALIZAR EL CLIENTE!");
         }
+        
         //Editar sólo si los campos del cliente a Editar son distintos actualmente
         if (!clienteCambiado.toString().equals(edit.toString())) {
-            listaClientes.remove(edit);
-            listaClientes.add(clienteCambiado);
+            String resultado = ClientesAPIUtils.sendPutRequest(clienteCambiado.getDNI(), clienteCambiado.toJSONString());
+            if (!CFG_APP.EN_PRODUCCION) {
+                System.out.println(resultado);
+            }
+            
+            hecho = !resultado.toUpperCase().startsWith("FALL");
+            if (hecho) {
+                listaClientes.remove(edit);
+                listaClientes.add(clienteCambiado);
+            }
         } else {
             return false;
         }
-        
-        //Hacer update en BBDD
-        boolean hecho = ControladorBBDD_mysql.hacerUPDATE("clientes", new String[]{"nombre", clienteCambiado.getNombre(), "apellidos", 
-            clienteCambiado.getApellidos(), "fecha_Alta", clienteCambiado.getFechAlta(), "provincia", clienteCambiado.getProvincia()},
-                new String[]{"NIF", clienteCambiado.getDNI()});
         
         return hecho;
     }
     
     /**
      * Actualizará el ArrayList de Cliente's actual a partir de los datos introducidos en la tabla de Clientes
-     * @param modeloT 
+     * Así, se mantendrá bien reflejado siempre el orden en ambos listados
+     * @param modeloT El DefaultTableModel (swing) proveniente de la tabla en GUI.
      */
     public static void actualizarListaDesdeTablaGUI(DefaultTableModel modeloT) {
         int numColumnas = modeloT.getColumnCount();
@@ -117,26 +141,19 @@ public class ControladorClientes {
     }
     
     /**
-     * Evaluará si la lista de Clientes de este controlador contiene alguna película con el NOMBRE y AÑO (ANIO) pasados.
-     * Realiza la comprobación directamente en la BASE DE DATOS.
+     * Evaluará si la lista de Clientes de este controlador contiene algún cliente con el NIF pasado por parámetro.
+     * Realiza la comprobación directamente a la API.
      * @param NIFusuario El DNI/NIF del Usuario a encontrar, en STRING.
      * @return TRUE si existe una entrada con el NIF especificado, FALSE si no.
      */
     public static boolean existeCliente(String NIFusuario) {
-        ResultSet res = ControladorBBDD_mysql.hacerSELECT("clientes", "*");
+        String resultado = ClientesAPIUtils.sendGetRequest(NIFusuario);
         
-        try {
-            while (res.next()) {
-                if (Objects.equals(res.getString("NIF"), NIFusuario)) {
-                    return true;
-                }
-            }
-        } catch (SQLException sqlErr) {
-            System.err.println("ERROR SQL => " + sqlErr.getMessage());
+        if (resultado.toUpperCase().startsWith("FALL")) {
+            return false;
         }
         
-        
-        return false;
+        return true;
     }
     
     
@@ -176,28 +193,26 @@ public class ControladorClientes {
      * FALSE en caso contrario.
      */
     private static boolean llenarListadoBBDD() {
-        ResultSet rs = ControladorBBDD_mysql.hacerSELECT("clientes", "*");
+        String resultado = ClientesAPIUtils.sendGetRequest("");
+        if (!CFG_APP.EN_PRODUCCION) {
+            System.out.println(resultado);
+        }
+        
+        if (resultado.toUpperCase().startsWith("FALL")) {
+            return false;
+        }
         
         //Limpiamos el ArrayList de Cliente's
         listaClientes = new ArrayList<Cliente>();
-        Cliente aux = null;
         
-        try {
-            while (rs.next()) {
-                aux = new Cliente();
-                
-                aux.setDNI(rs.getString("NIF"));
-                aux.setNombre(rs.getString("nombre"));
-                aux.setApellidos(rs.getString("apellidos"));
-                aux.setFechAlta(rs.getString("fecha_Alta"));
-                aux.setProvincia(rs.getString("provincia"));
-                
-                listaClientes.add(aux);
-            }
-        } catch (SQLException sqlErr) {
-            System.err.println("ERROR SQL! -> " + sqlErr.getMessage());
-            return false;
+        //Volcamos los valores de la API al ArrayList recién creado
+        listaClientes = Cliente.getArrayClientesFromJSON(resultado);
+        
+        if (listaClientes == null) {
+            // En caso de no conseguir llenar el listado, usar uno vacío
+            listaClientes = new ArrayList<Cliente>();
         }
+        
         
         return true;
         
